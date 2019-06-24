@@ -1,0 +1,17 @@
+.main{
+    margin-left: 20px;
+}
+
+.flexbox-main{
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    height: 400px;
+    justify-content: space-between;
+    
+}
+
+button{
+    width: 5px;
+    height: 15px
+}
