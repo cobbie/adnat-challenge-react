@@ -10,53 +10,93 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            currentPage: 'login',
-            testData: []
-         }
+            currentPage: 'signUp',
+            testData: [],
+            nameInput: '',
+            emailInput: '',
+            passwordInput: '',
+            passwordConfirmInput: ''
+         };
+        //  this.attemptSignUp = this.attemptSignUp.bind(this);
+         this.handleInput = this.handleInput.bind(this);
+         this.instance = axios.create({baseURL: 'http://localhost:3000'});
     }
 
     componentDidMount() {
 
-        // fetch('/auth/signup', {
-        //     method: 'POST',
+        // const instance = axios.create({baseURL: 'http://localhost:3000'})
+
+        // instance.get('/organisations', {
         //     headers: {
-        //         "Authorization": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         "name": "Barney Rubble",
-        //         "email": "barney@gmail.com",
-        //         "password": "mypassword",
-        //         "passwordConfirmation": "mypassword"
-        //     })
-        //   }).then(console.log(res.json))
-        //   .catch(console.log);
+        //         "Authorization": "c57270c4-f58b-40b8-b180-8a6ecf5ff307",
+        //         "Conent-Type": "application/json"
+        // }
+        // })
+        // .then((response) => {response.json(response)})
+        // .catch((error) => {response.json(error)})
 
-        const instance = axios.create({baseURL: 'http://localhost:3000'})
+        // instance.post('/auth/login', {
+        //             // "name": "Barney stinson",
+        //             "email": "barney@st2inson.com",
+        //             "password": "mypassword",
+        //             // "passwordConfirmation": "mypassword"
+        //       })
+        //   .then(function (res) {
+        //     console.log("success!\n" + JSON.stringify(res));
+        //   })
+        //   .catch(function (err) {
+        //     console.log("WOOPS! " + err);
+        //   });
+      }
 
-        // instance.get('/auth/signup', {port: 3000})
-        // .then((response) => {res.json(response)})
-        // .catch((error) => {res.json(error)})
-
-        instance.post('/auth/signup', {
-                    "name": "Barney stinson",
-                    "email": "barney@stinson.com",
-                    "password": "mypassword",
-                    "passwordConfirmation": "mypassword"
+      attemptSignUp = () => {
+        // inputVar = event.target.value
+        // console.log(this.state.nameInput);
+        console.log(JSON.stringify(this.state, null, 2));
+        this.instance.post('/auth/signup', {
+                    "name": this.state.nameInput,
+                    "email": this.state.emailInput,
+                    "password": this.state.passwordInput,
+                    "passwordConfirmation": this.state.passwordConfirmInput
               })
           .then(function (res) {
-            console.log("success!\n" + JSON.stringify(res));
+            console.log("successfully signed up!\n" + JSON.stringify(res, null, 2));
+            this.setState({currentPage: 'logIn'});
           })
           .catch(function (err) {
-            console.log("WOOPS! " + err);
+            console.log("Error!\n " + err);
+            alert('Error in signing up');
           });
+
+      }
+
+      handleInput(event){
+          this.setState({[event.target.name]: event.target.value});
       }
 
     render() { 
-        console.log(this.state.testData);
         return ( 
             <div>
-            <Login /> 
+             <Signup 
+                    onClick={this.attemptSignUp}
+
+                    nameValue={this.state.nameInput}
+                    nameName={"nameInput"}
+                    nameOnChange={this.handleInput}
+                    
+                    emailValue={this.state.emailInput}
+                    emailName={"emailInput"}
+                    emailOnChange={this.handleInput}
+
+                    passwordValue={this.state.passwordInput}
+                    passwordName={"passwordInput"}
+                    passwordOnChange={this.handleInput}
+
+                    passwordConfirmValue={this.state.passwordConfirmValue}
+                    passwordConfirmName={"passwordConfirmInput"}
+                    passwordConfirmOnChange={this.handleInput}
+
+            /> 
             </div>
          );
     }
