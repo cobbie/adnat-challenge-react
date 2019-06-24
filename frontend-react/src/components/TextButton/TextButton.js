@@ -4,7 +4,8 @@ import styled, { css } from 'styled-components';
 const TextButton = styled.p`
     color: ${props => props.color || 'blue'};
     text-decoration: underline;
-    font-size: ${props => props.fontSize || "12px"}
+    font-size: ${props => props.fontSize || "12px"};
+    cursor: pointer;
 `
 
 export default TextButton;
