@@ -1,25 +1,28 @@
 import React from 'react';
-import TextButton from "../../components/TextButton/TextButton";
+import Button from "../../components/button/button";
 
 import './style.css';
-
+import {Container, Col, Row} from 'react-bootstrap';
+import AdnatHeader from '../../components/AdnatHeader/AdnatHeader';
 const OrgActions = props => {
     return(
-        <div>
-            <div>
-                <TextButton fontSize="40px">Adnat</TextButton>
+
+        <Container>
+            <Col>
+                <AdnatHeader />
                 <p>Logged in as {props.name || "John Smith"}</p>
-                <TextButton>Log Out</TextButton>
-            </div>
-            <div>
+                <Button variant="secondary">Log Out</Button>
+            </Col>
+            <br />
+            <Col>
                 <h1>{props.org || "Bob's Burgers"}</h1>
-                <div>
-                <TextButton>View Shifts</TextButton>
-                <TextButton>Edit</TextButton>
-                <TextButton>Leave</TextButton>
-                </div>
-            </div>
-        </div>
+                <Row>
+                <Button variant="link">View Shifts</Button>
+                <Button variant="link">Edit</Button>
+                <Button variant="link">Leave</Button>
+                </Row>
+            </Col>
+        </Container>
     )
 }
 

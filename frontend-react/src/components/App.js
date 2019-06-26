@@ -12,7 +12,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            currentPage: 'joinCreateOrg',
+            currentPage: 'orgActions',
             nameInput: '',
             emailInput: '',
             passwordInput: '',
@@ -230,11 +230,15 @@ class App extends Component {
             />
         )
         }
-        return(
-            <JoinCreateOrg 
-            currentUser='temp'
-        />
-        )
+        // return(
+        //     <JoinCreateOrg 
+        //     currentUser='temp'
+        // />
+        // )
+        } else if(this.state.currentPage==='orgActions'){
+            return(
+                <OrgActions />
+            )
         }
     }
 
