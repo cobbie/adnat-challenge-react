@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+
 import Login from '../pages/Login/Login';
 import Signup from '../pages/Signup/Signup'
 import JoinCreateOrg from '../pages/JoinCreateOrg/JoinCreateOrg'
 import OrgActions from '../pages/OrgActions/OrgActions'
 import ShiftPage from '../pages/ShiftPage/ShiftPage';
+
 const axios = require('axios');
 
 class App extends Component {
@@ -79,8 +81,6 @@ class App extends Component {
             console.log("Error!\n " + err);
             alert('Error in logging in');
         });
-
-
       }
 
       renderPage = () => {
@@ -182,7 +182,9 @@ class App extends Component {
                     'hourlyRate': 5900
                 }, {
                     headers: {
-                        'Authorization': this.state.sessionId, 'Content-Type': 'application/json'
+                        'Authorization': this.state.sessionId, 
+                        'Content-Type': 'application/json',
+                        // "Access-Control-Allow-Credentials": true
                     }
                 })
                 .then(res => {
