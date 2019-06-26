@@ -1,6 +1,7 @@
 import React from "react";
 import './style.css'
 import OrgActions from "../../pages/OrgActions/OrgActions";
+
 export const Input = props => {
   return (
     <div>

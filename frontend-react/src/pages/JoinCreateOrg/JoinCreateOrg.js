@@ -5,12 +5,12 @@ import TextButton from "../../components/TextButton/TextButton";
 
 import "./style.css";
 
-const JoinCreateOrg = () => {
+const JoinCreateOrg = props => {
   return (
     <div>
       <div>
         <TextButton fontSize="40px">Adnat</TextButton>
-        <p>Logged in as John Smith</p>
+        <p>Logged in as {props.currentUser}</p>
         <TextButton>Log Out</TextButton>
         <p>You aren't a member of any existing organisations.</p>
         <p>Join an existing one or create a new one.</p>

@@ -8,15 +8,15 @@ import './style.css'
 const Signup = props => {
 
   return (
-    <div>
+    <div className="container">
       <TextButton fontSize="50px">Adnat</TextButton>
       <h1>Sign up</h1>
       <Input title="Name" value={props.nameValue} onChange={props.nameOnChange} name={props.nameName} defaultValue={"TEST NAME"}/>
       <Input title="Email" value={props.emailValue} onChange={props.emailOnChange} name={props.emailName} />
       <Input title="Password" value={props.passwordValue} onChange={props.passwordOnChange} name={props.passwordName} secondaryText="6 characters minimum"/>
       <Input title="Password confirmation" value={props.passwordConfirmValue} onChange={props.passwordConfirmOnChange} name={props.passwordConfirmName}/>
-      <Button onClick={props.onClick}>Sign up</Button>
-      <TextButton>Login</TextButton>
+      <Button variant="secondary" onClick={props.onClick}>Sign up</Button>
+      <Button variant="link">Login</Button>
     </div>
   );
 };
