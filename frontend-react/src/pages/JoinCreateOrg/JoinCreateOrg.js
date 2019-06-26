@@ -3,9 +3,10 @@ import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
 import TextButton from "../../components/TextButton/TextButton";
 
-import { Col, Container } from 'react-bootstrap';
+import { Col, Container, ListGroup } from 'react-bootstrap';
 import "./style.css";
 import AdnatHeader from "../../components/AdnatHeader/AdnatHeader";
+import ListItem from "../../components/ListItem/ListItem";
 
 const JoinCreateOrg = props => {
   return (
@@ -15,34 +16,30 @@ const JoinCreateOrg = props => {
     </Col>
     <Col>
         <p>Logged in as {props.currentUser}</p>
-        <Button>Log Out</Button>
+        <Button variant="link">Log Out</Button>
         <p>You aren't a member of any existing organisations.</p>
         <p>Join an existing one or create a new one.</p>
     </Col>
+    <br/>
       <Col>
         <h1>Organisations</h1>
-        <ul>
-          <li>
-            Bob's Burgers <TextButton>Edit</TextButton>{" "}
-            <TextButton>Join</TextButton>
-          </li>
-          <li>
-            Moe's Tavern <TextButton>Edit</TextButton>{" "}
-            <TextButton>Join</TextButton>
-          </li>
-          <li>
-            Sally's Sandwhiches <TextButton>Edit</TextButton>{" "}
-            <TextButton>Join</TextButton>
-          </li>
-        </ul>
+
+        <ListGroup>
+          <ListItem itemText="Bob's Burgers"/>
+          <ListItem itemText="Moe's Tavern" />
+          <ListItem itemText="Sally's Sandwiches" />
+        </ListGroup>
       </Col>
+      <br/>
       <Col>
           <h1>Create Organisation</h1>
           <Input title="Name" />
           <Input title="Hourly Rate ($ per hour)" />
-          <Button width="55px" height="25px">Update</Button>
-          <TextButton>Delete</TextButton>
+          <Button>Update</Button>
+          <Button variant="link">Delete</Button>
       </Col>
+      <br/>
+
       </Container>
   );
 };
