@@ -14,7 +14,8 @@ const Input = props => {
       placeholder={props.placeHolder}
       value={props.value}
       name={props.name}
-      onChange={props.onChange}></Form.Control>
+      onChange={props.onChange}
+      ></Form.Control>
     </Form.Group>
   </Form>
 

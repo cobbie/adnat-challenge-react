@@ -4,7 +4,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import TextButton from "../../components/TextButton/TextButton";
 import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
-import AdnatHeader from '../../components/AdnatHeader/AdnatHeader'
+import AdnatHeader from "../../components/AdnatHeader/AdnatHeader";
 import "./style.css";
 
 const Signup = props => {
@@ -12,6 +12,9 @@ const Signup = props => {
     <Container>
       <Col>
         <AdnatHeader />
+      </Col>
+      <br />
+      <Col>
         <h1>Sign up</h1>
       </Col>
       <Col>
@@ -52,14 +55,15 @@ const Signup = props => {
           placeHolder="Confirm your password"
         />
       </Col>
+      <br />
 
       <Col>
-      <Button variant="secondary" onClick={props.onClick}>
-        Sign up
-      </Button>
+        <Button variant="secondary" onClick={props.onClick}>
+          Sign up
+        </Button>
       </Col>
       <Col>
-      <Button variant="link">Login</Button>
+        <Button variant="link">Login</Button>
       </Col>
     </Container>
   );

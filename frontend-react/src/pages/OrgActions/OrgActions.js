@@ -1,9 +1,10 @@
 import React from 'react';
-import Button from "../../components/button/button";
-
 import './style.css';
+
+import Button from "../../components/button/button";
 import {Container, Col, Row} from 'react-bootstrap';
 import AdnatHeader from '../../components/AdnatHeader/AdnatHeader';
+
 const OrgActions = props => {
     return(
 

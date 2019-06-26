@@ -9,7 +9,6 @@ const ListItem = props => {
         <Row>
             <Col>
             {props.itemText}
-
             </Col>
             <Col>
             <Button variant='link'>Join</Button>

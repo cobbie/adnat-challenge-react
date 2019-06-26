@@ -12,7 +12,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            currentPage: 'orgActions',
+            currentPage: 'signUp',
             nameInput: '',
             emailInput: '',
             passwordInput: '',
@@ -238,6 +238,10 @@ class App extends Component {
         } else if(this.state.currentPage==='orgActions'){
             return(
                 <OrgActions />
+            )
+        } else if(this.state.currentPage==='shiftPage'){
+            return(
+                <ShiftPage />
             )
         }
     }
