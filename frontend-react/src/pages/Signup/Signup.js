@@ -1,22 +1,22 @@
 import React from "react";
+import { Container, Row, Col } from "react-bootstrap";
+
 import TextButton from "../../components/TextButton/TextButton";
 import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
-import { Container, Row, Col } from "react-bootstrap";
-
+import AdnatHeader from '../../components/AdnatHeader/AdnatHeader'
 import "./style.css";
 
 const Signup = props => {
   return (
     <Container>
       <Col>
-        <Button variant="link" size="lg" btnSize="90px">Adnat</Button>
+        <AdnatHeader />
         <h1>Sign up</h1>
       </Col>
       <Col>
         <Input
           title="Name"
-          type="name"
           value={props.nameValue}
           onChange={props.nameOnChange}
           name={props.nameName}

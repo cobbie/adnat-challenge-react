@@ -12,7 +12,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            currentPage: 'signUp',
+            currentPage: 'joinCreateOrg',
             nameInput: '',
             emailInput: '',
             passwordInput: '',
@@ -223,12 +223,18 @@ class App extends Component {
                 //         "hourlyRate": 59000
                 //     }
                 // })
+            //temp
             return(
                 <JoinCreateOrg 
                 currentUser='temp'
             />
         )
         }
+        return(
+            <JoinCreateOrg 
+            currentUser='temp'
+        />
+        )
         }
     }
 
