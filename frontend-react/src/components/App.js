@@ -178,7 +178,7 @@ class App extends Component {
 
                     
                 this.instance.post('/organisations/create_join', {
-                    'name': 'temp temp arya',
+                    'name': 'temp arya',
                     'hourlyRate': 5900
                 }, {
                     headers: {
