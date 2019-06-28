@@ -16,7 +16,7 @@ const ShiftPage = props => {
             </Col>
             <br />
             <Col>
-            <p>Logged in as John Smith.</p><Button variant="link">Log out</Button>
+            <p>Logged in as {props.currentUser}.</p><Button variant="link">Log out</Button>
             </Col>
             <br />
             <Col>

@@ -9,6 +9,7 @@ import ListItem from "../../components/ListItem/ListItem";
 import "./style.css";
 
 const JoinCreateOrg = props => {
+
   return (
     <Container>
     <Col>
@@ -25,9 +26,7 @@ const JoinCreateOrg = props => {
         <h1>Organisations</h1>
 
         <ListGroup>
-          <ListItem itemText="Bob's Burgers"/>
-          <ListItem itemText="Moe's Tavern" />
-          <ListItem itemText="Sally's Sandwiches" />
+        {props.orgs.map((val, ind) => {return <ListItem key={ind} itemText={val} />})}
         </ListGroup>
       </Col>
       <br/>

@@ -12,7 +12,7 @@ const OrgActions = props => {
         <Container>
             <Col>
                 <AdnatHeader />
-                <p>Logged in as {props.name || "John Smith"}</p>
+                <p>Logged in as {props.currentUser || "John Smith"}</p>
                 <Button variant="secondary">Log Out</Button>
             </Col>
             <br />

@@ -13,17 +13,20 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            currentPage: 'editOrg',
+            currentPage: 'joinCreateOrg',
+            passwordConfirmInput: '',
+            currentUser: '',
             nameInput: '',
             emailInput: '',
-            passwordInput: '',
-            passwordConfirmInput: '',
             rateInput: '',
-            sessionId: ''
+            sessionId: '',
+            passwordInput: '',
+            isLoadingData: true
          };
          this.instance = axios.create({
              baseURL: 'http://localhost:3000',
             });
+        this.allOrgs=[];
     }
 
     //for DEV
@@ -74,8 +77,6 @@ class App extends Component {
               });
         } 
         alert('Error in input!');
-        console.log(matchingPW, pwLength, nonEmptyInput);
-
       }
 
       attemptLogIn = () => {
@@ -91,7 +92,8 @@ class App extends Component {
                 emailInput: '',
                 passwordInput: '',
                 passwordConfirmInput: '',
-                sessionId: res.data.sessionId
+                sessionId: res.data.sessionId,
+                isLoadingData: true
             });
         })
         .catch( err => {
@@ -173,56 +175,29 @@ class App extends Component {
                 />
             )
         } else if(this.state.currentPage==='joinCreateOrg'){
+            // let allOrgs = ['temp1', 'temp2'];
             if(this.state.sessionId.length!=0){
-                const options = path => {
-                    return(
-                        {
-                            path: {path},
-                            headers: {
-                                "Authorization": this.state.sessionId,
-                                "Content-Type": "application/json"
-                            }, 
-                        }
-                        )
-                        
-                    }
-                // this.instance.get(options('/organisations'))
-                // .then(res => JSON.stringify(res, null, 2))
-                // .catch(err => console.log("error in get \n", JSON.stringify(err, null, 2), this.state.sessionId))
-
-            return(
-                <JoinCreateOrg 
-                currentUser='temp'
-                nameValue={this.state.nameInput}
-                nameName={"nameInput"}
-                nameOnChange={this.handleInput}
-
-                rateValue={this.state.rateInput}
-                rateName={"rateInput"}
-                rateOnChange={this.handleInput}
-
-                onClick={this.attemptUpdate}
-            />
-        )
-        }
-        return(
-            <JoinCreateOrg 
-                currentUser='temp'
-
-                nameValue={this.state.nameInput}
-                nameName={"nameInput"}
-                nameOnChange={this.handleInput}
-
-                rateValue={this.state.rateInput}
-                rateName={"rateInput"}
-                rateOnChange={this.handleInput}
-
-                onClick={this.attemptUpdate}
-        />
-        )
+                return(
+                    <JoinCreateOrg 
+                    currentUser='temp'
+                    nameValue={this.state.nameInput}
+                    nameName={"nameInput"}
+                    nameOnChange={this.handleInput}
+    
+                    rateValue={this.state.rateInput}
+                    rateName={"rateInput"}
+                    rateOnChange={this.handleInput}
+    
+                    onClick={this.attemptUpdate}
+    
+                    orgs={this.allOrgs} />
+                    )
+            }
         } else if(this.state.currentPage==='orgActions'){
             return(
-                <OrgActions />
+                <OrgActions 
+                    currentUser={this.state.currentUser}
+                />
             )
         } else if(this.state.currentPage==='shiftPage'){
             return(
@@ -239,8 +214,34 @@ class App extends Component {
           this.setState({[event.target.name]: event.target.value});
       }
 
+      loadOrgData = () => {
+        this.instance.get('/organisations', {
+            headers: {
+                "Authorization": this.state.sessionId,
+                "Content-Type": "application/json"
+            }
+        })
+        .then(res => {
+            let allOrgs = []
+            console.log(JSON.stringify(res, null, 2));
+            for(let i = 0; i < res.data.length-1; i++){
+                this.allOrgs = [...this.allOrgs, res.data[i].name];
+            }
+            this.setState({
+                isLoadingData: false
+            })
+        })
+            .catch(err => console.log("error in get \n", JSON.stringify(err, null, 2)))
+      }
+
 
     render() { 
+        const { isLoadingData } = this.state;
+
+        if(isLoadingData){
+            this.loadOrgData();
+            return <h5>LOADING DATA</h5>
+        }
         return ( 
             <div>
                 {this.renderPage()}
