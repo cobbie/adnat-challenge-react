@@ -11,7 +11,7 @@ const ListItem = props => {
             {props.itemText}
             </Col>
             <Col>
-            <Button variant='link'>Join</Button>
+            <Button variant='link' onClick={props.onClickJoin}>Join</Button>
             <Button variant='link'>Edit</Button>
             </Col>
         </Row>
