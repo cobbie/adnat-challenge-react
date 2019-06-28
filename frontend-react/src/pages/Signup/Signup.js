@@ -1,10 +1,10 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 
-import TextButton from "../../components/TextButton/TextButton";
 import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
 import AdnatHeader from "../../components/AdnatHeader/AdnatHeader";
+
 import "./style.css";
 
 const Signup = props => {

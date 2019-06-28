@@ -1,12 +1,12 @@
 import React from 'react';
 import {Container, Table, Row, Col} from 'react-bootstrap';
 
+import AdnatHeader from '../../components/AdnatHeader/AdnatHeader';
 import Input from '../../components/Input/Input'
 import Button from '../../components/Button/Button'
 
 
 import './style.css'
-import AdnatHeader from '../../components/AdnatHeader/AdnatHeader';
 
 const ShiftPage = props => {
     return(
@@ -62,7 +62,7 @@ const ShiftPage = props => {
                         <td>temp</td>
                     </tr><tr>
                         <td>temp</td>
-                        <td><Input /></td>
+                        <td><Input size="sm"/></td>
                         <td><Input /></td>
                         <td><Input /></td>
                         <td><Input /></td>

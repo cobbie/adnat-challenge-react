@@ -12,21 +12,37 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            currentPage: 'signUp',
+            currentPage: 'joinCreateOrg',
             nameInput: '',
             emailInput: '',
             passwordInput: '',
             passwordConfirmInput: '',
+            rateInput: '',
             sessionId: ''
          };
          this.instance = axios.create({
              baseURL: 'http://localhost:3000',
             });
-        this.counter = 0;
     }
 
-    componentDidUpdate(){
-        this.counter += 1;
+    //for DEV
+    componentDidMount = () => {
+        this.instance.post('/auth/login', {
+            "email": "asdfgh@gh.com",
+            "password": "asdfgh"
+        })
+        .then(res => {
+            console.log("successfully logged in!\n" + JSON.stringify(res, null, 2));
+            this.setState({
+                sessionId: res.data.sessionId
+            });
+        })
+        .catch( err => {
+            console.log("Error!\n " + err);
+            alert('Error in logging in');
+        });
+    }
+    componentDidUpdate = () => {
         console.table(this.state);
     }
 
@@ -83,6 +99,34 @@ class App extends Component {
         });
       }
 
+      attemptUpdate = () => {
+          this.instance.post('/organisations/create_join', {
+            'name': this.state.nameInput,
+            'hourlyRate': this.state.rateInput
+        }, {
+            headers: {
+                'Authorization': this.state.sessionId, 
+                'Content-Type': 'application/json',
+                // "Access-Control-Allow-Credentials": true
+            }
+        })
+        .then(res => {
+            console.log(res);
+        })
+        .catch(error => {
+            if (error.response) {
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+                } else if (error.request) {
+                console.log(error.request);
+                } else {
+                console.log('Error', error.message);
+                }
+                console.log(error.config);
+        })
+    }
+
       renderPage = () => {
           if(this.state.currentPage==='signUp'){
 
@@ -125,38 +169,6 @@ class App extends Component {
             )
         } else if(this.state.currentPage==='joinCreateOrg'){
             if(this.state.sessionId.length!=0){
-
-                // this.instance = axios.create({
-                //     baseURL: 'http://localhost:3000',
-                //     headers: {
-                //        "Authorization": this.state.sessionId,
-                //        "Content-Type": "application/json"
-                //     }
-                //    });
-
-                
-                // ERROR HANDLING
-                // this.instance.get('/organisations')
-                // .catch(function (error) {
-                //     if (error.response) {
-                //     // The request was made and the server responded with a status code
-                //     // that falls out of the range of 2xx
-                //     console.log(error.response.data);
-                //     console.log(error.response.status);
-                //     console.log(error.response.headers);
-                //     } else if (error.request) {
-                //     // The request was made but no response was received
-                //     // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-                //     // http.ClientRequest in node.js
-                //     console.log(error.request);
-                //     } else {
-                //     // Something happened in setting up the request that triggered an Error
-                //     console.log('Error', error.message);
-                //     }
-                //     console.log(error.config);
-                // });
-
-                // console.log(this.state.sessionId);
                 const options = path => {
                     return(
                         {
@@ -172,69 +184,37 @@ class App extends Component {
                 // this.instance.get(options('/organisations'))
                 // .then(res => JSON.stringify(res, null, 2))
                 // .catch(err => console.log("error in get \n", JSON.stringify(err, null, 2), this.state.sessionId))
-                
-                    // testing
-                
 
-                    
-                this.instance.post('/organisations/create_join', {
-                    'name': 'temp arya',
-                    'hourlyRate': 5900
-                }, {
-                    headers: {
-                        'Authorization': this.state.sessionId, 
-                        'Content-Type': 'application/json',
-                        // "Access-Control-Allow-Credentials": true
-                    }
-                })
-                .then(res => {
-                    console.log(res);
-                })
-                .catch(error => {
-                    if (error.response) {
-                        // The request was made and the server responded with a status code
-                        // that falls out of the range of 2xx
-                        console.log(error.response.data);
-                        console.log(error.response.status);
-                        console.log(error.response.headers);
-                        } else if (error.request) {
-                        // The request was made but no response was received
-                        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-                        // http.ClientRequest in node.js
-                        console.log(error.request);
-                        } else {
-                        // Something happened in setting up the request that triggered an Error
-                        console.log('Error', error.message);
-                        }
-                        console.log(error.config);
-                })
-
-                //using .request
-
-                // this.instance.request({
-                //     url: '/organisations/create_join',
-                //     method: 'post',
-                //     headers: {
-                //         "Authorization": this.state.sessionId,
-                //         "Content-Type": "application/json"
-                //     },
-                //     data: {
-                //         "name": "temp temp orgscz",
-                //         "hourlyRate": 59000
-                //     }
-                // })
-            //temp
             return(
                 <JoinCreateOrg 
                 currentUser='temp'
+                nameValue={this.state.nameInput}
+                nameName={"nameInput"}
+                nameOnChange={this.handleInput}
+
+                rateValue={this.state.rateInput}
+                rateName={"rateInput"}
+                rateOnChange={this.handleInput}
+
+                onClick={this.attemptUpdate}
             />
         )
         }
-        // return(
-        //     <JoinCreateOrg 
-        //     currentUser='temp'
-        // />
-        // )
+        return(
+            <JoinCreateOrg 
+                currentUser='temp'
+
+                nameValue={this.state.nameInput}
+                nameName={"nameInput"}
+                nameOnChange={this.handleInput}
+
+                rateValue={this.state.rateInput}
+                rateName={"rateInput"}
+                rateOnChange={this.handleInput}
+
+                onClick={this.attemptUpdate}
+        />
+        )
         } else if(this.state.currentPage==='orgActions'){
             return(
                 <OrgActions />
@@ -249,6 +229,7 @@ class App extends Component {
       handleInput = event => {
           this.setState({[event.target.name]: event.target.value});
       }
+
 
     render() { 
         return ( 

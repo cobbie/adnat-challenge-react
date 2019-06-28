@@ -30,10 +30,13 @@ const Login = props => {
                 <p>Remember me</p>
             </Col>
             <Col>
-                <TextButton onClick={props.onClick}>Login</TextButton>
+                {/* <TextButton onClick={props.onClick}>Login</TextButton> */}
+                <Button variant="link" onClick = {props.onClick}>Login</Button>
             </Col>
             <Col>
-                <TextButton>Forgot your password?</TextButton>
+                {/* <TextButton>Forgot your password?</TextButton> */}
+                <Button variant="link" onClick = {props.onClick}>Forgot your password?</Button>
+
             </Col>
         </Container>
 

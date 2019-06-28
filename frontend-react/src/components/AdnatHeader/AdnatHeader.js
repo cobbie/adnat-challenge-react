@@ -1,6 +1,8 @@
 import React from 'react';
-import './style.css'
+
 import {Button} from 'react-bootstrap';
+
+import './style.css'
 
 const AdnatHeader = props => {
     return(

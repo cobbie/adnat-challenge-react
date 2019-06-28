@@ -1,12 +1,13 @@
 import React from "react";
+import { Col, Container, ListGroup } from 'react-bootstrap';
+
 import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
 import TextButton from "../../components/TextButton/TextButton";
-
-import { Col, Container, ListGroup } from 'react-bootstrap';
-import "./style.css";
 import AdnatHeader from "../../components/AdnatHeader/AdnatHeader";
 import ListItem from "../../components/ListItem/ListItem";
+
+import "./style.css";
 
 const JoinCreateOrg = props => {
   return (
@@ -33,9 +34,16 @@ const JoinCreateOrg = props => {
       <br/>
       <Col>
           <h1>Create Organisation</h1>
-          <Input title="Name" />
-          <Input title="Hourly Rate ($ per hour)" />
-          <Button>Update</Button>
+          <Input title="Name" 
+          value={props.nameValue}
+          onChange={props.nameOnChange}
+          name={props.nameName}/>
+          <Input title="Hourly Rate ($ per hour)"
+          value={props.rateValue}
+          onChange={props.rateOnChange}
+          name={props.rateName}
+           />
+          <Button onClick={props.onClick}>Update</Button>
           <Button variant="link">Delete</Button>
       </Col>
       <br/>
