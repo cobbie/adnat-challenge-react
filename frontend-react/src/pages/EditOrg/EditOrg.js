@@ -1,14 +1,11 @@
 import React from "react";
-import { Col, Container, ListGroup } from 'react-bootstrap';
+import { Col, Container } from 'react-bootstrap';
 
 import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
 import AdnatHeader from "../../components/AdnatHeader/AdnatHeader";
-import ListItem from "../../components/ListItem/ListItem";
 
-import "./style.css";
-
-const JoinCreateOrg = props => {
+const EditOrg = props => {
   return (
     <Container>
     <Col>
@@ -17,26 +14,16 @@ const JoinCreateOrg = props => {
     <Col>
         <p>Logged in as {props.currentUser}</p>
         <Button variant="link">Log Out</Button>
-        <p>You aren't a member of any existing organisations.</p>
-        <p>Join an existing one or create a new one.</p>
     </Col>
     <br/>
-      <Col>
-        <h1>Organisations</h1>
-
-        <ListGroup>
-          <ListItem itemText="Bob's Burgers"/>
-          <ListItem itemText="Moe's Tavern" />
-          <ListItem itemText="Sally's Sandwiches" />
-        </ListGroup>
-      </Col>
       <br/>
       <Col>
-          <h1>Create Organisation</h1>
+          <h1>Edit Organisation</h1>
           <Input title="Name" 
           value={props.nameValue}
           onChange={props.nameOnChange}
           name={props.nameName}/>
+
           <Input title="Hourly Rate ($ per hour)"
           value={props.rateValue}
           onChange={props.rateOnChange}
@@ -45,10 +32,8 @@ const JoinCreateOrg = props => {
           <Button onClick={props.onClick}>Update</Button>
           <Button variant="link">Delete</Button>
       </Col>
-      <br/>
-
       </Container>
   );
 };
 
-export default JoinCreateOrg;
+export default EditOrg;

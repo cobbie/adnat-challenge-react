@@ -5,6 +5,7 @@ import Signup from '../pages/Signup/Signup'
 import JoinCreateOrg from '../pages/JoinCreateOrg/JoinCreateOrg'
 import OrgActions from '../pages/OrgActions/OrgActions'
 import ShiftPage from '../pages/ShiftPage/ShiftPage';
+import EditOrg from '../pages/EditOrg/EditOrg'
 
 const axios = require('axios');
 
@@ -12,7 +13,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            currentPage: 'joinCreateOrg',
+            currentPage: 'editOrg',
             nameInput: '',
             emailInput: '',
             passwordInput: '',
@@ -112,6 +113,10 @@ class App extends Component {
         })
         .then(res => {
             console.log(res);
+            alert(`Successfully created ${this.state.nameInput}.`);
+            this.setState({
+                currentPage: 'orgActions'
+            })
         })
         .catch(error => {
             if (error.response) {
@@ -222,6 +227,10 @@ class App extends Component {
         } else if(this.state.currentPage==='shiftPage'){
             return(
                 <ShiftPage />
+            )
+        } else if(this.state.currentPage==='editOrg'){
+            return(
+                <EditOrg />
             )
         }
     }
