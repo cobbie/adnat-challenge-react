@@ -26,6 +26,7 @@ class App extends Component {
             allOrgs: [],
             isLoadingData: true
          };
+         this.editOrgId;
          this.instance = axios.create({
              baseURL: 'http://localhost:3000',
             });
@@ -269,18 +270,18 @@ class App extends Component {
         });
     }
 
-    editExistingOrg = (id, newName, newRate) => {
-        // this.instance.get('/organisations', {
-        //     headers: {
-        //         'Authorization': this.state.sessionId,
-        //         'Content-Type': 'application/json'
-        //     }
-        // })
-        // .then(res => )
+    goToEditPage = id => {
+        this.setState({
+            currentPage: 'editOrg',
+        });
+        this.editOrgId = id;
 
-        this.instance.put(`/organisations/:${id}`, {
-            'name': newName,
-            'hourlyRate': newRate
+    }
+
+    editExistingOrg = () => {
+        this.instance.put(`/organisations/${this.editOrgId}`, {
+            'name': this.state.nameInput,
+            'hourlyRate': this.state.rateInput
         }, {
             headers: {
                 'Authorization': this.state.sessionId,
@@ -290,7 +291,13 @@ class App extends Component {
         .then(res => {
             console.log(res);
             alert(`Successfully updated organisation!`);
-        })
+            this.setState({
+                    currentPage: 'orgActions',
+                    nameInput: '',
+                    rateInput: ''
+                })
+            }
+        )
         .catch(error => {
             if (error.response) {
                 console.log(error.response.data);
@@ -348,7 +355,6 @@ class App extends Component {
             />
         )
     } else if(this.state.currentPage==='joinCreateOrg'){
-        // let allOrgs = ['temp1', 'temp2'];
         if(this.state.sessionId.length!=0){
             return(
                 <JoinCreateOrg 
@@ -366,17 +372,8 @@ class App extends Component {
 
                 orgs={this.state.allOrgs} 
                 onClickJoin={this.joinOrg}
-                onClickEdit = {id => 
-                {
-                    this.setState({
-                        currentPage: 'editOrg',
-                        orgId: id
-                        });
-                    // need to get org ID for edit page
-                        
-                }}
+                onClickEdit = {this.goToEditPage}
                 onClickLogout = {this.attemptLogOut}
-
                 />
                 )
         }
@@ -414,7 +411,7 @@ class App extends Component {
             rateOnChange={this.handleInput}
 
             currentUser = {this.state.currentUser}
-            onClickUpdate={() => this.editExistingOrg(this.state.orgId,this.state.nameInput, this.state.rateInput)} 
+            onClickUpdate={this.editExistingOrg} 
             // onClickDelete
             onClickLogout = {this.attemptLogOut}
 
@@ -430,7 +427,6 @@ class App extends Component {
         const { isLoadingData } = this.state;
 
         if(isLoadingData){
-            // this.loadOrgData();
             return <h5>LOADING DATA</h5>
         }
         return ( 
