@@ -21,8 +21,8 @@ const OrgActions = props => {
                 <h1>{props.org || "Bob's Burgers"}</h1>
                 <Row>
                 <Button variant="link" onClick={props.onClickVS}>View Shifts</Button>
-                <Button variant="link">Edit</Button>
-                <Button variant="link">Leave</Button>
+                <Button variant="link" onClick={props.onClickEdit}>Edit</Button>
+                <Button variant="link" onClick={props.onCLickLeave}>Leave</Button>
                 </Row>
             </Col>
         </Container>

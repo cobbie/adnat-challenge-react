@@ -17,18 +17,20 @@ class App extends Component {
             currentPage: 'joinCreateOrg',
             passwordConfirmInput: '',
             currentUser: '',
+            orgId: '',
             nameInput: '',
             emailInput: '',
             rateInput: '',
             sessionId: '',
             passwordInput: '',
+            allOrgs: [],
             isLoadingData: true
          };
          this.instance = axios.create({
              baseURL: 'http://localhost:3000',
             });
-        this.allOrgs = [];
-        this.orgId = 1;
+        // this.allOrgs = [];
+        // this.orgId = 1;
     }
 
     //for DEV
@@ -53,8 +55,10 @@ class App extends Component {
             })
             .then(res => {
                 console.log('second res', res)
+                this.loadOrgData();
                 this.setState({
                     currentUser: res.data.name,
+                    orgId: res.data.organisationId,
                     isLoadingData: false
                 })
             }
@@ -65,11 +69,11 @@ class App extends Component {
             console.log("Error!\n " + err);
             alert('Error in logging in');
         });
-        // this.attemptLogIn("asdfgh@gh.com", "asdfgh");
-        
+    //     // this.attemptLogIn("asdfgh@gh.com", "asdfgh");
     }
     componentDidUpdate = () => {
         console.table(this.state);
+        console.log("allOrgs", this.state.allOrgs);
     }
 
     attemptSignUp = () => {
@@ -114,15 +118,28 @@ class App extends Component {
     })
     .then(res => {
         console.log("ORG DATA LOADED", JSON.stringify(res, null, 2));
+        let new_orgs = [...this.state.allOrgs];
         for(let i = 0; i < res.data.length-1; i++){
-            this.allOrgs = [...this.allOrgs, res.data[i].name];
+            new_orgs = [...new_orgs, [res.data[i].name, res.data[i].id]];
         }
         this.setState({
-            isLoadingData: false
+            isLoadingData: false,
+            allOrgs: new_orgs
         })
         return res;
     })
-        .catch(err => console.log("error in get \n", JSON.stringify(err, null, 2)))
+        .catch(error => {
+            if (error.response) {
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+                } else if (error.request) {
+                console.log(error.request);
+                } else {
+                console.log('Error', error.message);
+                }
+                console.log(error.config);
+        })
 
         console.log(this.instance.get('/shifts', {headers: {'Authorization': this.state.sessionId, 'Content-Type': 'application/json'}}).then(res => console.log(res)).catch(err => console.log(err)));
         console.log(this.instance.get('/users', {headers: {'Authorization': this.state.sessionId, 'Content-Type': 'application/json'}}).then(res => console.log('org users', res)).catch(err=>console.log('err in get org users', err)));
@@ -156,8 +173,10 @@ class App extends Component {
         })
         .then(res => {
             console.log('second res', res)
+            this.loadOrgData();
             this.setState({
                 currentUser: res.data.name,
+                orgId: res.data.organisationId,
                 isLoadingData: false
             })
         }
@@ -251,6 +270,14 @@ class App extends Component {
     }
 
     editExistingOrg = (id, newName, newRate) => {
+        // this.instance.get('/organisations', {
+        //     headers: {
+        //         'Authorization': this.state.sessionId,
+        //         'Content-Type': 'application/json'
+        //     }
+        // })
+        // .then(res => )
+
         this.instance.put(`/organisations/:${id}`, {
             'name': newName,
             'hourlyRate': newRate
@@ -330,20 +357,24 @@ class App extends Component {
                 nameName={"nameInput"}
                 nameOnChange={this.handleInput}
 
+
                 rateValue={this.state.rateInput}
                 rateName={"rateInput"}
                 rateOnChange={this.handleInput}
 
                 onClick={this.attemptUpdate}
 
-                orgs={this.allOrgs} 
+                orgs={this.state.allOrgs} 
                 onClickJoin={this.joinOrg}
-                onClickEdit = {() => 
+                onClickEdit = {id => 
                 {
-                    this.setState({currentPage: 'editOrg'});
+                    this.setState({
+                        currentPage: 'editOrg',
+                        orgId: id
+                        });
                     // need to get org ID for edit page
-                    // this.orgId = {() => this.orgId = };
-                    }}
+                        
+                }}
                 onClickLogout = {this.attemptLogOut}
 
                 />
@@ -382,7 +413,8 @@ class App extends Component {
             rateName={"rateInput"}
             rateOnChange={this.handleInput}
 
-            onClickUpdate={this.editExistingOrg(this.orgId,this.state.nameInput, this.state.rateInput)} 
+            currentUser = {this.state.currentUser}
+            onClickUpdate={() => this.editExistingOrg(this.state.orgId,this.state.nameInput, this.state.rateInput)} 
             // onClickDelete
             onClickLogout = {this.attemptLogOut}
 

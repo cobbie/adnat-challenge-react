@@ -31,9 +31,10 @@ const JoinCreateOrg = props => {
           return <ListItem 
                   ind={ind} 
                   key={ind} 
-                  itemText={val} 
+                  itemText={val[0]}
+                  orgId={val[1]} 
                   onClickJoin={() => {props.onClickJoin(ind + 1)}}
-                  onClickEdit = {props.onClickEdit}
+                  onClickEdit = {() => {props.onClickEdit(orgId)}}
                   />
           
           })}
