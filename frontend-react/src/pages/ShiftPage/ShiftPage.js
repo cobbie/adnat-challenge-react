@@ -4,7 +4,7 @@ import {Container, Table, Row, Col} from 'react-bootstrap';
 import AdnatHeader from '../../components/AdnatHeader/AdnatHeader';
 import Input from '../../components/Input/Input'
 import Button from '../../components/Button/Button'
-
+import LogOutButton from '../../components/LogOutButton/LogOutButton';
 
 import './style.css'
 
@@ -16,7 +16,8 @@ const ShiftPage = props => {
             </Col>
             <br />
             <Col>
-            <p>Logged in as {props.currentUser}.</p><Button variant="link">Log out</Button>
+            <p>Logged in as {props.currentUser}.</p>
+            <LogOutButton onClickLogout={props.onClickLogout}/>
             </Col>
             <br />
             <Col>

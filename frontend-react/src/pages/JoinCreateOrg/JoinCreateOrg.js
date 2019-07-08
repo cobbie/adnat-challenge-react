@@ -5,6 +5,7 @@ import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
 import AdnatHeader from "../../components/AdnatHeader/AdnatHeader";
 import ListItem from "../../components/ListItem/ListItem";
+import LogOutButton from "../../components/LogOutButton/LogOutButton";
 
 import "./style.css";
 
@@ -17,7 +18,7 @@ const JoinCreateOrg = props => {
     </Col>
     <Col>
         <p>Logged in as {props.currentUser}</p>
-        <Button variant="link">Log Out</Button>
+          <LogOutButton onClickLogout={props.onClickLogout} />
         <p>You aren't a member of any existing organisations.</p>
         <p>Join an existing one or create a new one.</p>
     </Col>
@@ -26,7 +27,16 @@ const JoinCreateOrg = props => {
         <h1>Organisations</h1>
 
         <ListGroup>
-        {props.orgs.map((val, ind) => {return <ListItem ind={ind} key={ind} itemText={val} onClickJoin={() => {props.onClickJoin(ind + 1)}}/>})}
+        {props.orgs.map((val, ind) => {
+          return <ListItem 
+                  ind={ind} 
+                  key={ind} 
+                  itemText={val} 
+                  onClickJoin={() => {props.onClickJoin(ind + 1)}}
+                  onClickEdit = {props.onClickEdit}
+                  />
+          
+          })}
         </ListGroup>
       </Col>
       <br/>

@@ -12,7 +12,7 @@ const ListItem = props => {
             </Col>
             <Col>
             <Button variant='link' onClick={props.onClickJoin}>Join</Button>
-            <Button variant='link'>Edit</Button>
+            <Button variant='link' onClick={props.onClickEdit}>Edit</Button>
             </Col>
         </Row>
         </ListGroup.Item>

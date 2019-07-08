@@ -6,15 +6,15 @@ import JoinCreateOrg from '../pages/JoinCreateOrg/JoinCreateOrg'
 import OrgActions from '../pages/OrgActions/OrgActions'
 import ShiftPage from '../pages/ShiftPage/ShiftPage';
 import EditOrg from '../pages/EditOrg/EditOrg'
+const {post} = require('../requests/requests')
 
 const axios = require('axios');
-const {post} = require('../requests/requests')
 
 class App extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            currentPage: 'signUp',
+            currentPage: 'joinCreateOrg',
             passwordConfirmInput: '',
             currentUser: '',
             nameInput: '',
@@ -27,7 +27,8 @@ class App extends Component {
          this.instance = axios.create({
              baseURL: 'http://localhost:3000',
             });
-        this.allOrgs=[];
+        this.allOrgs = [];
+        this.orgId = 1;
     }
 
     //for DEV
@@ -37,16 +38,35 @@ class App extends Component {
             "password": "asdfgh"
         })
         .then(res => {
-            console.log("successfully logged in!\n" + JSON.stringify(res, null, 2));
+            console.log(`successfully logged in!\n${JSON.stringify(res, null, 2)}`);
             this.setState({
-                sessionId: res.data.sessionId
+                sessionId: res.data.sessionId,
             });
+            return res.data.sessionId
+        })
+        .then(res => {
+            this.instance.get('/users/me', {
+                headers: {
+                    'Authorization': res,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => {
+                console.log('second res', res)
+                this.setState({
+                    currentUser: res.data.name,
+                    isLoadingData: false
+                })
+            }
+            )
+            .catch(err => console.log('error in get /users/me', err));
         })
         .catch( err => {
             console.log("Error!\n " + err);
             alert('Error in logging in');
         });
-
+        // this.attemptLogIn("asdfgh@gh.com", "asdfgh");
+        
     }
     componentDidUpdate = () => {
         console.table(this.state);
@@ -93,21 +113,26 @@ class App extends Component {
         }
     })
     .then(res => {
-        console.log(JSON.stringify(res, null, 2));
+        console.log("ORG DATA LOADED", JSON.stringify(res, null, 2));
         for(let i = 0; i < res.data.length-1; i++){
             this.allOrgs = [...this.allOrgs, res.data[i].name];
         }
         this.setState({
             isLoadingData: false
         })
+        return res;
     })
         .catch(err => console.log("error in get \n", JSON.stringify(err, null, 2)))
+
+        console.log(this.instance.get('/shifts', {headers: {'Authorization': this.state.sessionId, 'Content-Type': 'application/json'}}).then(res => console.log(res)).catch(err => console.log(err)));
+        console.log(this.instance.get('/users', {headers: {'Authorization': this.state.sessionId, 'Content-Type': 'application/json'}}).then(res => console.log('org users', res)).catch(err=>console.log('err in get org users', err)));
+
     }
 
-    attemptLogIn = () => {
+    attemptLogIn = (email=this.state.emailInput, password=this.state.passwordInput) => {
     this.instance.post('/auth/login', {
-        "email": this.state.emailInput,
-        "password": this.state.passwordInput
+        "email": email,
+        "password": password
     })
     .then(res => {
         console.log("successfully logged in!\n" + JSON.stringify(res, null, 2));
@@ -120,11 +145,51 @@ class App extends Component {
             sessionId: res.data.sessionId,
             isLoadingData: true
         });
+        return res.data.sessionId;
+    })
+    .then(res => {
+        this.instance.get('/users/me', {
+            headers: {
+                'Authorization': res,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => {
+            console.log('second res', res)
+            this.setState({
+                currentUser: res.data.name,
+                isLoadingData: false
+            })
+        }
+        )
+        .catch(err => console.log('error in get /users/me', err));
     })
     .catch( err => {
         console.log("Error!\n " + err);
         alert('Error in logging in');
     });
+    }
+
+    attemptLogOut = () => {
+        this.instance.delete('/auth/logout', {
+            headers: {
+            'Authorization': this.state.sessionId, 
+            'Content-Type': 'application/json'
+                }})
+        .then(res => this.setState({currentPage: 'logIn', currentUser: ''}))
+        .catch(error => {
+            if (error.response) {
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+                } else if (error.request) {
+                console.log(error.request);
+                } else {
+                console.log('Error', error.message);
+                }
+                console.log(error.config);
+        });
+        // console.log(this.state.sessionId);
     }
 
     attemptUpdate = () => {
@@ -185,6 +250,36 @@ class App extends Component {
         });
     }
 
+    editExistingOrg = (id, newName, newRate) => {
+        this.instance.put(`/organisations/:${id}`, {
+            'name': newName,
+            'hourlyRate': newRate
+        }, {
+            headers: {
+                'Authorization': this.state.sessionId,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => {
+            console.log(res);
+            alert(`Successfully updated organisation!`);
+        })
+        .catch(error => {
+            if (error.response) {
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+                } else if (error.request) {
+                console.log(error.request);
+                } else {
+                console.log('Error', error.message);
+                }
+                console.log(error.config);
+        });
+    }
+
+
+
     renderPage = () => {
         if(this.state.currentPage==='signUp'){
 
@@ -243,6 +338,14 @@ class App extends Component {
 
                 orgs={this.allOrgs} 
                 onClickJoin={this.joinOrg}
+                onClickEdit = {() => 
+                {
+                    this.setState({currentPage: 'editOrg'});
+                    // need to get org ID for edit page
+                    // this.orgId = {() => this.orgId = };
+                    }}
+                onClickLogout = {this.attemptLogOut}
+
                 />
                 )
         }
@@ -250,15 +353,40 @@ class App extends Component {
         return(
             <OrgActions 
                 currentUser={this.state.currentUser}
+                onClickVS={() => {
+                    this.setState({isLoadingData: true});
+                    this.loadOrgData();
+                    this.setState({currentPage: 'shiftPage'})
+                    }}
+                onClickEdit={() => {this.setState({currentPage: 'editOrg'})}}
+                onClickLeave={()=> this.leaveOrg}
+                onClickLogout = {this.attemptLogOut}
             />
         )
     } else if(this.state.currentPage==='shiftPage'){
         return(
-            <ShiftPage />
+            <ShiftPage 
+                currentUser={this.state.currentUser}
+                onClickLogout = {this.attemptLogOut}
+                
+            />
         )
     } else if(this.state.currentPage==='editOrg'){
         return(
-            <EditOrg />
+            <EditOrg 
+            nameValue={this.state.nameInput}
+            nameName={"nameInput"}
+            nameOnChange={this.handleInput}
+
+            rateValue={this.state.rateInput}
+            rateName={"rateInput"}
+            rateOnChange={this.handleInput}
+
+            onClickUpdate={this.editExistingOrg(this.orgId,this.state.nameInput, this.state.rateInput)} 
+            // onClickDelete
+            onClickLogout = {this.attemptLogOut}
+
+            />
         )
     }
 }
@@ -266,10 +394,11 @@ class App extends Component {
 
 
     render() { 
+        console.log('this.props.children', this.props.children);
         const { isLoadingData } = this.state;
 
         if(isLoadingData){
-            this.loadOrgData();
+            // this.loadOrgData();
             return <h5>LOADING DATA</h5>
         }
         return ( 

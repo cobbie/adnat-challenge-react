@@ -4,6 +4,7 @@ import { Col, Container } from 'react-bootstrap';
 import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
 import AdnatHeader from "../../components/AdnatHeader/AdnatHeader";
+import LogOutButton from "../../components/LogOutButton/LogOutButton"
 
 const EditOrg = props => {
   return (
@@ -13,7 +14,7 @@ const EditOrg = props => {
     </Col>
     <Col>
         <p>Logged in as {props.currentUser}</p>
-        <Button variant="link">Log Out</Button>
+        <LogOutButton onClickLogout={props.onClickLogout}/>
     </Col>
     <br/>
       <br/>
@@ -29,8 +30,8 @@ const EditOrg = props => {
           onChange={props.rateOnChange}
           name={props.rateName}
            />
-          <Button onClick={props.onClick}>Update</Button>
-          <Button variant="link">Delete</Button>
+          <Button onClick={props.onClickUpdate}>Update</Button>
+          <Button variant="link" onClick={props.onClickDelete}>Delete</Button>
       </Col>
       </Container>
   );
