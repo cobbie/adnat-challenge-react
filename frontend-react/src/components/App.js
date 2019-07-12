@@ -15,17 +15,25 @@ class App extends Component {
         super(props);
         this.state = { 
             currentPage: 'signUp',
+            isLoadingData: false,
+            allOrgs: [],
             passwordConfirmInput: '',
             currentUser: '',
             orgName: '',
             orgId: '',
+            
+            passwordInput: '',
             nameInput: '',
             emailInput: '',
             rateInput: '',
             sessionId: '',
-            passwordInput: '',
-            allOrgs: [],
-            isLoadingData: false
+
+            // shift page input
+            shiftDateInput: '',
+            startTimeInput: '',
+            finishTimeInput: '',
+            breakTimeInput: '',
+
          };
          this.editOrgId;
          this.instance = axios.create({
@@ -179,25 +187,47 @@ class App extends Component {
             passwordInput: '',
             passwordConfirmInput: '',
             sessionId: res.data.sessionId,
-            isLoadingData: true
+            isLoadingData: true,
         });
         return res.data.sessionId;
     })
-    .then(res => {
+    .then(res_seshId => {
         this.instance.get('/users/me', {
             headers: {
-                'Authorization': res,
+                'Authorization': res_seshId,
                 'Content-Type': 'application/json'
             }
         })
-        .then(res => {
-            console.log('second res', res)
+        .then(res_user => {
+            console.log('second res', res_user)
             this.loadOrgData();
-            this.setState({
-                currentUser: res.data.name,
-                orgId: res.data.organisationId,
-                isLoadingData: false
-            })
+            console.log('res_seshId', res_seshId)
+            console.log('res_user.data.organisationId',res_user.data.organisationId);
+            if(res_user.data.organisationId === null){
+                this.setState({currentPage: 'joinCreateOrg'})                
+            } else{
+                this.instance.get('/organisations', {
+                    headers:{
+                        'Authorization': res_seshId,
+                        'Content-Type': 'application/json'
+                }})
+                .then(res_orgs => {
+                    console.log("res_orgs", res_orgs);
+                    res_orgs.data.forEach(org => {
+                        if(org.id===res_user.data.organisationId){
+                            console.log('org.name', org.name)
+                            this.setState({
+                                currentPage: 'orgActions',
+                                orgId: res_user.data.organisationId,
+                                orgName: org.name,
+                                isLoadingData: false
+                            })
+                            return org.name;
+                        }
+                    })
+                })
+            }
+            this.setState({currentUser: res_user.data.name})
         }
         )
         .catch(err => console.log('error in get /users/me', err));
@@ -275,6 +305,7 @@ class App extends Component {
         .then(res => {
             console.log(res);
             this.setState({
+                currentPage: 'orgActions',
                 orgName: res.data.name,
                 orgId: res.data.id
             })
@@ -381,7 +412,7 @@ class App extends Component {
         if(this.state.sessionId.length!=0){
             return(
                 <JoinCreateOrg 
-                currentUser='temp'
+                currentUser={this.state.currentUser}
                 nameValue={this.state.nameInput}
                 nameName={"nameInput"}
                 nameOnChange={this.handleInput}
@@ -419,6 +450,7 @@ class App extends Component {
     } else if(this.state.currentPage==='shiftPage'){
         return(
             <ShiftPage 
+                org={this.state.orgName}
                 currentUser={this.state.currentUser}
                 onClickLogout = {this.attemptLogOut}
                 

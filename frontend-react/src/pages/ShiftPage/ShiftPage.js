@@ -21,7 +21,7 @@ const ShiftPage = props => {
             </Col>
             <br />
             <Col>
-                <h1>Bob's Burgers</h1>
+                <h1>{props.org || 'Bob\'s Burgers'}</h1>
                 <h3>Shifts</h3>
                 <Table striped border="true" hover>
             <thead>
