@@ -6,7 +6,7 @@ import JoinCreateOrg from '../pages/JoinCreateOrg/JoinCreateOrg'
 import OrgActions from '../pages/OrgActions/OrgActions'
 import ShiftPage from '../pages/ShiftPage/ShiftPage';
 import EditOrg from '../pages/EditOrg/EditOrg'
-const {post} = require('../requests/requests')
+import EditUser from '../pages/EditUser/EditUser'
 
 const axios = require('axios');
 
@@ -463,7 +463,8 @@ class App extends Component {
                     this.loadOrgData();
                     this.setState({currentPage: 'shiftPage'})
                     }}
-                onClickEdit={() => {this.setState({currentPage: 'editOrg'})}}
+                onClickEditOrg={() => {this.setState({currentPage: 'editOrg'})}}
+                onClickEditUser={() => {this.setState({currentPage: 'editUser'})}}
                 onClickLeave={this.leaveOrg}
                 onClickLogout = {this.attemptLogOut}
 
@@ -494,6 +495,13 @@ class App extends Component {
             // onClickDelete
             onClickLogout = {this.attemptLogOut}
 
+            />
+        )
+    } else if(this.state.currentPage==='editUser'){
+        return(
+            <EditUser 
+                currentUser={this.state.currentUser}
+                onClickLogout={this.attemptLogOut}
             />
         )
     }
