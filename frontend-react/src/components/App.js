@@ -45,6 +45,7 @@ class App extends Component {
 
     //for DEV
     componentDidMount = () => {
+        this.attemptLogIn('q@q.q', 'asdfgh');
         // this.instance.post('/auth/login', {
         //     "email": "asdfgh@gh.com",
         //     "password": "asdfgh"
@@ -172,6 +173,8 @@ class App extends Component {
         // console.log(this.instance.get('/users', {headers: {'Authorization': this.state.sessionId, 'Content-Type': 'application/json'}}).then(res => console.log('org users', res)).catch(err=>console.log('err in get org users', err)));
 
     }
+
+
 
     attemptLogIn = (email=this.state.emailInput, password=this.state.passwordInput) => {
     this.instance.post('/auth/login', {
@@ -366,6 +369,25 @@ class App extends Component {
         });
     }
 
+    leaveOrg = () => {
+        console.log('clicked');
+        this.instance.post('/organisations/leave', {}, {
+            headers: {
+                'Authorization': this.state.sessionId,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => {
+            alert('You have left your organisation.');
+            this.setState({
+                currentPage: 'joinCreateOrg',
+                orgId: '',
+                orgName: ''
+            })
+        })
+        .catch(err => console.log(err));
+    }
+
 
 
     renderPage = () => {
@@ -442,7 +464,7 @@ class App extends Component {
                     this.setState({currentPage: 'shiftPage'})
                     }}
                 onClickEdit={() => {this.setState({currentPage: 'editOrg'})}}
-                onClickLeave={()=> this.leaveOrg}
+                onClickLeave={this.leaveOrg}
                 onClickLogout = {this.attemptLogOut}
 
             />

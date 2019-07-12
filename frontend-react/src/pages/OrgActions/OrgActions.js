@@ -22,7 +22,7 @@ const OrgActions = props => {
                 <Row>
                 <Button variant="link" onClick={props.onClickVS}>View Shifts</Button>
                 <Button variant="link" onClick={props.onClickEdit}>Edit</Button>
-                <Button variant="link" onClick={props.onCLickLeave}>Leave</Button>
+                <Button variant="link" onClick={props.onClickLeave}>Leave</Button>
                 </Row>
             </Col>
         </Container>
