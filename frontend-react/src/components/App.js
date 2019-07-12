@@ -21,6 +21,7 @@ class App extends Component {
             currentUser: '',
             orgName: '',
             orgId: '',
+            currentPassword: '',
             
             passwordInput: '',
             nameInput: '',
@@ -45,7 +46,7 @@ class App extends Component {
 
     //for DEV
     componentDidMount = () => {
-        this.attemptLogIn('q@q.q', 'asdfgh');
+        this.attemptLogIn('a@m.ca', 'asdfgh');
         // this.instance.post('/auth/login', {
         //     "email": "asdfgh@gh.com",
         //     "password": "asdfgh"
@@ -189,6 +190,7 @@ class App extends Component {
             emailInput: '',
             passwordInput: '',
             passwordConfirmInput: '',
+            currentPassword: password,
             sessionId: res.data.sessionId,
             isLoadingData: true,
         });
@@ -388,6 +390,40 @@ class App extends Component {
         .catch(err => console.log(err));
     }
 
+    editUserDetails = (obj_input) => {
+        if(obj_input !== null){
+            console.log('obj_input in main', obj_input);
+
+            if(obj_input.name || obj_input.email){
+            this.instance.put('/users/me', {
+                "name": obj_input.name,
+                "email": obj_input.email
+            }, {
+                headers: {
+                    "Authorization": this.state.sessionId,
+                    "Conent-Type": "application/json"
+                }
+            })
+            .then(res => {
+                console.log(res);
+                this.setState({
+                    currentPage: 'orgActions',
+                    currentUser: res.data.name ? res.data.name : this.state.currentUser,
+                })
+            })
+            .catch(err => console.log(err))
+        }
+        if(obj_input.password){
+            this.instance.post('users/me/change_password', {
+                "oldPassword": obj_input.oldPassword,
+                "newPassword": obj_input.password,
+                "newPasswordConfirmation": obj_input.passwordConfirmation
+            })
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
+        }
+        }
+    }
 
 
     renderPage = () => {
@@ -502,6 +538,8 @@ class App extends Component {
             <EditUser 
                 currentUser={this.state.currentUser}
                 onClickLogout={this.attemptLogOut}
+                onClickSubmit={this.editUserDetails}
+                oldPassword={this.state.currentPassword}
             />
         )
     }

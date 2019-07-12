@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { Col, Container, ListGroup, Row } from "react-bootstrap";
+
 import AdnatHeader from "../../components/AdnatHeader/AdnatHeader";
 import LogOutButton from "../../components/LogOutButton/LogOutButton";
 import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
+
+const _ = require('lodash');
 
 class EditUser extends Component {
     constructor(props) {
@@ -15,12 +18,36 @@ class EditUser extends Component {
 
             newNameInput: '',
             newEmailInput: '',
-            newPasswordInput: ''
+            oldPasswordInput: '',
+            newPasswordInput: '',
+            newConfirmPasswordInput: ''
          }
+    }
+
+    verifyInput = () => {
+        let input_obj = {};
+
+        this.state.newNameInput !== '' ? _.merge(input_obj, {name:this.state.newNameInput}) : null;
+        this.state.newEmailInput !== '' ? _.merge(input_obj, {email:this.state.newEmailInput}) : null;
+
+        if(this.state.newPasswordInput !== ''){
+            let matchingPws = true;
+            this.state.oldPasswordInput === this.props.oldPassword ? _.merge(input_obj, {oldPassword:this.state.oldPasswordInput}) : matchingPws = false;
+            this.state.newPasswordInput === this.state.newConfirmPasswordInput 
+            ? _.merge(input_obj, {password: this.state.newPasswordInput, passwordConfirmation: this.state.newConfirmPasswordInput})
+            :  matchingPws = false
+            if(matchingPws === false){
+                alert('Either your new passwords do not match, or your old password is incorrect.');
+                return null;
+            }
+        }
+        console.log(`input_obj ${input_obj}`);
+        return input_obj;
     }
 
     renderInput = () => {
         let input = [];
+        let input_obj = {};
         let counter = 1;
         if(this.state.name){
             input = [...input, 
@@ -42,14 +69,22 @@ class EditUser extends Component {
                 onChange={this.handleInput}
                 value={this.state.newEmailInput}
                 name="newEmailInput"
-                // value={props.nameValue}
-                // onChange={props.nameOnChange}
-                // name={props.nameName}
               />
               </li>]
               counter +=1;
         }
         if(this.state.password){
+            input = [...input, 
+            <li key={counter}>
+                <Input title="Old Password"
+                onChange={this.handleInput}
+                value={this.state.oldPasswordInput}
+                name="oldPasswordInput">
+                </Input>
+            </li>]
+
+            counter += 1;
+
             input = [...input, 
                 <li key={counter}>
                 <Input
@@ -57,19 +92,22 @@ class EditUser extends Component {
                 onChange={this.handleInput}
                 value={this.state.newPasswordInput}
                 name="newPasswordInput"
-                // value={props.nameValue}
-                // onChange={props.nameOnChange}
-                // name={props.nameName}
-              /></li>,<li key={counter + 1}>
+            /></li>]
+            counter +=1;
+            input = [...input, <li key={counter}>
               <Input
             title="Confirm Password"
             onChange={this.handleInput}
             value={this.state.newConfirmPasswordInput}
             name="newConfirmPasswordInput"
-            // value={props.nameValue}
-            // onChange={props.nameOnChange}
-            // name={props.nameName}
           /></li>]
+          counter += 1;
+        }
+
+        if(counter > 1){
+            input = [...input, <li key={counter ? this.state.password : counter}>
+                <Button onClick={() => this.props.onClickSubmit(this.verifyInput())}>Submit</Button>
+            </li>]
         }
         return input;
     }
@@ -94,6 +132,7 @@ class EditUser extends Component {
         <ul style={{listStyleType: 'none'}}>
         {this.renderInput()}
         </ul>
+
     </Container>
          );
     }
