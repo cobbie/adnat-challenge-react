@@ -46,7 +46,7 @@ class App extends Component {
 
     //for DEV
     componentDidMount = () => {
-        this.attemptLogIn('a@m.ca', 'asdfgh');
+        this.attemptLogIn('m@o.ccc', 'aaaaaa');
         // this.instance.post('/auth/login', {
         //     "email": "asdfgh@gh.com",
         //     "password": "asdfgh"
@@ -414,12 +414,17 @@ class App extends Component {
             .catch(err => console.log(err))
         }
         if(obj_input.password){
-            this.instance.post('users/me/change_password', {
+            this.instance.put('/users/me/change_password', {
                 "oldPassword": obj_input.oldPassword,
                 "newPassword": obj_input.password,
                 "newPasswordConfirmation": obj_input.passwordConfirmation
+            }, {
+                headers: {
+                    "Authorization": this.state.sessionId,
+                    "Content-Type": "application/json"
+                }
             })
-            .then(res => console.log(res))
+            .then(res => this.setState({currentPassword: obj_input.password, currentPage: 'orgActions'}))
             .catch(err => console.log(err))
         }
         }

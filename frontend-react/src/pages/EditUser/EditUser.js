@@ -32,12 +32,20 @@ class EditUser extends Component {
 
         if(this.state.newPasswordInput !== ''){
             let matchingPws = true;
-            this.state.oldPasswordInput === this.props.oldPassword ? _.merge(input_obj, {oldPassword:this.state.oldPasswordInput}) : matchingPws = false;
-            this.state.newPasswordInput === this.state.newConfirmPasswordInput 
-            ? _.merge(input_obj, {password: this.state.newPasswordInput, passwordConfirmation: this.state.newConfirmPasswordInput})
-            :  matchingPws = false
+
+            this.state.oldPasswordInput === this.props.oldPassword ?
+            _.merge(input_obj, {oldPassword:this.state.oldPasswordInput}) :
+             matchingPws = false;
+
+            this.state.newPasswordInput === this.state.newConfirmPasswordInput ?
+             _.merge(input_obj, {password: this.state.newPasswordInput, passwordConfirmation: this.state.newConfirmPasswordInput}):
+             matchingPws = false;
+
+            this.state.newPasswordInput.length >= 6 ? matchingPws = matchingPws : matchingPws = false;
+
+            this.state.newPasswordInput !== this.state.oldPasswordInput ? matchingPws = matchingPws : matchingPws = false;
             if(matchingPws === false){
-                alert('Either your new passwords do not match, or your old password is incorrect.');
+                alert('Invalid password input. \n(Either your new passwords are not 6 characters, they do not match, or your old password is incorrect.');
                 return null;
             }
         }
@@ -125,9 +133,14 @@ class EditUser extends Component {
       <LogOutButton onClickLogout={this.props.onClickLogout} />
 
       <h1>Update your info</h1>
-      <Button variant="link" width="140px" onClick={() => this.setState({name: true})}>Edit Name</Button>
-      <Button variant="link" width="140px" onClick={() => this.setState({email: true})}>Edit Email</Button>
-      <Button variant="link" width="140px" onClick={() => this.setState({password: true})}>Edit Password</Button>
+      <Button variant="link" width="140px" onClick={() => this.setState({name: !this.state.name})}>Edit Name</Button>
+      <Button variant="link" width="140px" onClick={() => this.setState({email: !this.state.email})}>Edit Email</Button>
+      <Button variant="link" width="140px" onClick={() => this.setState({
+          password: !this.state.password,
+          oldPasswordInput: '',
+          newPasswordInput: '',
+          newConfirmPasswordInput: ''
+          })}>Edit Password</Button>
             <br></br>
         <ul style={{listStyleType: 'none'}}>
         {this.renderInput()}
