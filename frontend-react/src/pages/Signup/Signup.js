@@ -63,7 +63,7 @@ const Signup = props => {
         </Button>
       </Col>
       <Col>
-        <Button variant="link">Login</Button>
+        <Button variant="link" onClick={props.onClickLogin}>Login</Button>
       </Col>
     </Container>
   );
