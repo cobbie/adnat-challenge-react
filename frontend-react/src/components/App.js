@@ -435,23 +435,16 @@ class App extends Component {
             'Authorization': this.state.sessionId,
             'Content-Type': 'application/json'
         }})
-        .then(res =>{
-            this.setState({currentPage: 'shiftPage'});
+        .then(shifts_arr =>{
+            this.setState({currentPage: 'shiftPage', shifts: shifts_arr});
             console.log('shifts', res)
         })
-        .catch(error => {
-            if (error.response) {
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-                } else if (error.request) {
-                console.log(error.request);
-                } else {
-                console.log('Error', error.message);
-                }
-                console.log(error.config);
-        });
+        .catch(err => console.log(err));
     }
+
+
+
+
 
 
     renderPage = () => {
@@ -541,6 +534,8 @@ class App extends Component {
                 org={this.state.orgName}
                 currentUser={this.state.currentUser}
                 onClickLogout = {this.attemptLogOut}
+                shifts = {this.state.shifts}
+
                 
             />
         )
