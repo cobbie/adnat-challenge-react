@@ -430,6 +430,29 @@ class App extends Component {
         }
     }
 
+    openShiftPage = () => {
+        this.instance.get('/shifts', {headers:{
+            'Authorization': this.state.sessionId,
+            'Content-Type': 'application/json'
+        }})
+        .then(res =>{
+            this.setState({currentPage: 'shiftPage'});
+            console.log('shifts', res)
+        })
+        .catch(error => {
+            if (error.response) {
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+                } else if (error.request) {
+                console.log(error.request);
+                } else {
+                console.log('Error', error.message);
+                }
+                console.log(error.config);
+        });
+    }
+
 
     renderPage = () => {
         if(this.state.currentPage==='signUp'){
@@ -500,9 +523,10 @@ class App extends Component {
                 currentUser={this.state.currentUser}
                 org={this.state.orgName}
                 onClickVS={() => {
-                    this.setState({isLoadingData: true});
-                    this.loadOrgData();
-                    this.setState({currentPage: 'shiftPage'})
+                    // this.setState({isLoadingData: true});
+                    // this.loadOrgData();
+                    // this.setState({currentPage: 'shiftPage'})
+                    this.openShiftPage();
                     }}
                 onClickEditOrg={() => {this.setState({currentPage: 'editOrg'})}}
                 onClickEditUser={() => {this.setState({currentPage: 'editUser'})}}
