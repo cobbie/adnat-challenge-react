@@ -6,7 +6,12 @@ import './style.css'
 
 const AdnatHeader = props => {
     return(
-        <Button className="center" variant="link" bsPrefix="btn adnat-header" style={{fontSize: 50, color:"#3EB0D7"}} >Adnat</Button>
+        <Button 
+        className="center" 
+        variant="link" 
+        bsPrefix="btn adnat-header" 
+        style={{fontSize: 50, color:"#3EB0D7"}}
+        onClick={props.onClick}>Adnat</Button>
     )
 }
 

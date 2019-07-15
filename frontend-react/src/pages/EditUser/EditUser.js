@@ -55,7 +55,6 @@ class EditUser extends Component {
 
     renderInput = () => {
         let input = [];
-        let input_obj = {};
         let counter = 1;
         if(this.state.name){
             input = [...input, 
@@ -128,7 +127,9 @@ class EditUser extends Component {
         console.table(this.state);
         return ( 
             <Container>
-      <AdnatHeader />
+      <AdnatHeader 
+          onClick={this.props.onClickHeader}
+      />
       <p>Logged in as {this.props.currentUser}</p>
       <LogOutButton onClickLogout={this.props.onClickLogout} />
 

@@ -10,7 +10,9 @@ const EditOrg = props => {
   return (
     <Container>
     <Col>
-        <AdnatHeader />
+        <AdnatHeader 
+          onClick={props.onClickHeader}
+        />
     </Col>
     <Col>
         <p>Logged in as {props.currentUser}</p>

@@ -13,7 +13,11 @@ const OrgActions = props => {
       <Col>
         <AdnatHeader />
         <p>Logged in as {props.currentUser || "John Smith"}</p>
-        <LogOutButton onClickLogout={props.onClickLogout} />
+      </Col>
+      <Col>
+      <Row>
+      <LogOutButton onClickLogout={props.onClickLogout} />
+      </Row>
       </Col>
       <br />
       <Col>

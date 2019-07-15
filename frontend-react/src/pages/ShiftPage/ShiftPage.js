@@ -8,6 +8,8 @@ import LogOutButton from '../../components/LogOutButton/LogOutButton';
 
 import './style.css'
 
+const _ = require('lodash');
+
 class ShiftPage extends Component {
     constructor(props) {
         super(props);
@@ -17,17 +19,39 @@ class ShiftPage extends Component {
             finishTimeInput: '',
             breakInput: ''
          }
+         this.name=this.props.currentUser;
+         this.id=this.props.userId;
     }
 
     componentDidUpdate = () => {
-        console.table(this.state);
+        console.log(this.state);
     }
 
     handleInput = event => {
         this.setState({[event.target.name]: event.target.value})
     }
 
-    renderEmployees = () => {
+    renderShifts = shifts => {
+        // let shifts = [];
+        shifts.forEach(shift => {
+            shifts = [...shifts, 
+            <tr>
+       //name        
+        <td>{shift}</td>
+       //shift date     
+        <td></td>
+       // starttime         
+       <td></td>
+        //end time         
+        <td></td>
+       // break length(mins)        
+       <td></td>
+       //hours worked         
+       <td></td>
+       //shift cost         
+       <td></td>
+            </tr>]
+        })
         console.log('wenkwonk');
     }
 
@@ -35,13 +59,18 @@ class ShiftPage extends Component {
         return ( 
             <Container>
             <Col>
-            <AdnatHeader />
+            <AdnatHeader
+                onClick={this.props.onClickHeader} />
             </Col>
             <br />
             <Col>
             <p>Logged in as {this.props.currentUser}.</p>
-            <LogOutButton onClickLogout={this.props.onClickLogout}/>
             </Col>
+            <Row>
+                <Col>
+                <LogOutButton onClickLogout={this.props.onClickLogout}/>
+                </Col>
+            </Row>
             <br />
             <Col>
                 <h1>{this.props.org || 'Bob\'s Burgers'}</h1>
@@ -106,7 +135,17 @@ class ShiftPage extends Component {
                             onChange={this.handleInput}
                         /></td>
 
-                        <td colSpan="2"><Button variant="info" width="125px">Create shift</Button></td>
+                        <td colSpan="2"><Button 
+                        variant="info" 
+                        width="125px"
+                        // onClick={
+                        //     this.props.onClickCreateShift(
+                        //         _.assign({'userId': this.id}, this.state)
+                        //         )}
+                        >Create shift
+
+                        </Button>
+                                </td>
                     </tr>
                 </tbody>
 

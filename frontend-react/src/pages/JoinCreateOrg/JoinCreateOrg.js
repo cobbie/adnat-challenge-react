@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Container, ListGroup } from 'react-bootstrap';
+import { Col, Container, ListGroup, Row} from 'react-bootstrap';
 
 import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
@@ -14,11 +14,19 @@ const JoinCreateOrg = props => {
   return (
     <Container>
     <Col>
-        <AdnatHeader />
+        <AdnatHeader 
+          onClick={props.onClickHeader}
+        />
     </Col>
     <Col>
         <p>Logged in as {props.currentUser}</p>
+        </Col>
+        <Row>
+          <Col>
           <LogOutButton onClickLogout={props.onClickLogout} />
+          </Col>
+        </Row>
+          <Col>
         <p>You aren't a member of any existing organisations.</p>
         <p>Join an existing one or create a new one.</p>
     </Col>

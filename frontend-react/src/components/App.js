@@ -46,7 +46,8 @@ class App extends Component {
 
     //for DEV
     componentDidMount = () => {
-        this.attemptLogIn('m@o.ccc', 'aaaaaa');
+        // this.attemptLogIn('m@o.ccc', 'aaaaaa');
+        this.attemptLogIn('a@aaa.com', 'asdfgh')
         // this.instance.post('/auth/login', {
         //     "email": "asdfgh@gh.com",
         //     "password": "asdfgh"
@@ -337,6 +338,23 @@ class App extends Component {
 
     }
 
+    goToOrgActionsPage = () => {
+        this.setState({
+            currentPage: 'orgActions',
+
+            //empty input
+            passwordInput: '',
+            nameInput: '',
+            emailInput: '',
+            rateInput: '',
+            shiftDateInput: '',
+            startTimeInput: '',
+            finishTimeInput: '',
+            breakTimeInput: ''
+
+        })
+    }
+
     editExistingOrg = () => {
         this.instance.put(`/organisations/${this.editOrgId}`, {
             'name': this.state.nameInput,
@@ -436,17 +454,33 @@ class App extends Component {
             'Content-Type': 'application/json'
         }})
         .then(shifts_arr =>{
-            this.setState({currentPage: 'shiftPage', shifts: shifts_arr});
-            console.log('shifts', res)
+            this.setState({currentPage: 'shiftPage', shifts: [22]}, () => console.log('shifts', this.state.shifts));
         })
-        .catch(err => console.log(err));
+        .catch(error => {
+            if (error.response) {
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+                } else if (error.request) {
+                console.log(error.request);
+                } else {
+                console.log('Error', error.message);
+                }
+                console.log(error.config);
+        });
     }
 
-
-
-
-
-
+    createShift = (new_shift) => {
+        
+        this.instance.post('/shifts', new_shift, {
+            headers: {
+                "Authorization": this.state.sessionId,
+                "Content-Type": "application/json"
+            }
+        })
+        .then(res => console.log(res))
+        .catch(err => console.log('err in createShift', err));
+    }
     renderPage = () => {
         if(this.state.currentPage==='signUp'){
 
@@ -501,6 +535,7 @@ class App extends Component {
                 rateName={"rateInput"}
                 rateOnChange={this.handleInput}
 
+                onClickHeader={this.goToOrgActionsPage}
                 onClick={this.attemptUpdate}
 
                 orgs={this.state.allOrgs} 
@@ -517,7 +552,7 @@ class App extends Component {
                 org={this.state.orgName}
                 onClickVS={() => {
                     // this.setState({isLoadingData: true});
-                    // this.loadOrgData();
+                    this.loadOrgData();
                     // this.setState({currentPage: 'shiftPage'})
                     this.openShiftPage();
                     }}
@@ -534,7 +569,9 @@ class App extends Component {
                 org={this.state.orgName}
                 currentUser={this.state.currentUser}
                 onClickLogout = {this.attemptLogOut}
+                onClickHeader={this.goToOrgActionsPage}
                 shifts = {this.state.shifts}
+                userId={this.state}
 
                 
             />
@@ -552,6 +589,7 @@ class App extends Component {
 
             currentUser = {this.state.currentUser}
             onClickUpdate={this.editExistingOrg} 
+            onClickHeader={this.goToOrgActionsPage}
             // onClickDelete
             onClickLogout = {this.attemptLogOut}
 
@@ -564,6 +602,7 @@ class App extends Component {
                 onClickLogout={this.attemptLogOut}
                 onClickSubmit={this.editUserDetails}
                 oldPassword={this.state.currentPassword}
+                onClickHeader={this.goToOrgActionsPage}
             />
         )
     }
