@@ -60,8 +60,8 @@ class ShiftPage extends Component {
             const hoursWorked = this.calculateHours(shift.start, shift.finish, shift.breakLength);
             const cost = (hoursWorked * parseFloat(this.props.hourlyRate)).toFixed(2);
             // add am pm
-            startTime < 12 ? startTime = `${startTime} am` : startTime = `${startTime} pm`;
-            endTime < 12 ? endTime = `${endTime} am` : endTime = `${endTime} pm`;
+            startTime.slice(0,2) < 12 ? startTime = `${startTime} am` : startTime = `${startTime} pm`;
+            endTime.slice(0,2) < 12 ? endTime = `${endTime} am` : endTime = `${endTime} pm`;
 
            let employeeName = ''
            this.props.orgUsers.data.forEach(user => {
@@ -69,21 +69,20 @@ class ShiftPage extends Component {
                    employeeName = user.name;
            }})
             shift_rows = [...shift_rows, 
-
             <tr>
-       {/* //name         */}
+       {/* name         */}
         <td>{employeeName}</td>
-       {/* //shift date      */}
+       {/* shift date      */}
         <td>{date}</td>
-       {/* // starttime          */}
+       {/* starttime          */}
        <td>{startTime}</td>
-        {/* //end time          */}
+        {/* end time          */}
         <td>{endTime}</td>
-       {/* // break length(mins)         */}
+       {/* break length(mins)         */}
        <td>{shift.breakLength}</td>
-       {/* //hours worked          */}
+       {/* hours worked          */}
        <td>{hoursWorked}</td>
-       {/* //shift cost             */}
+       {/* shift cost             */}
        <td>{cost}</td>
             </tr>
             ]
@@ -152,13 +151,13 @@ class ShiftPage extends Component {
                         variant="info" 
                         width="125px"
                         onClick={
-                            this.props.onClickCreateShift(
+                            () => {this.props.onClickCreateShift(
                                 _.assign({'userId': this.id}, {
                                     "start": `${_.split(this.state.shiftDateInput, '/', 3).reverse().join('/')} ${this.state.startTimeInput}`,
                                     "finish": `${_.split(this.state.shiftDateInput, '/', 3).reverse().join('/')} ${this.state.startTimeInput}`,
                                     "breakLength": this.state.breakInput
                                 })
-                                )}
+                                )}}
                         >Create shift
 
                         </Button>
