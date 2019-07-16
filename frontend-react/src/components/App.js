@@ -38,6 +38,7 @@ class App extends Component {
 
          };
          this.editOrgId;
+         this.orgUsers;
          this.instance = axios.create({
              baseURL: 'http://localhost:3000',
             });
@@ -363,6 +364,7 @@ class App extends Component {
             'Content-Type': 'application/json'
         }})
         .then(res => {
+            this.orgUsers = res;
             return res;
         })
         .catch(err => err)
@@ -463,9 +465,8 @@ class App extends Component {
 
     openShiftPage = () => {
 
-        const users = this.getOrgUsers();
         const orgs = this.loadOrgData();
-
+        const orgUsers = this.getOrgUsers();
         this.instance.get('/shifts', {headers:{
             'Authorization': this.state.sessionId,
             'Content-Type': 'application/json'
@@ -591,6 +592,7 @@ class App extends Component {
                 onClickLogout = {this.attemptLogOut}
                 onClickHeader={this.goToOrgActionsPage}
                 hourlyRate={this.state.orgRate}
+                orgUsers={this.orgUsers}
                 shifts = {this.state.shifts}
                 onClickCreateShift={this.createShift}
                 userId={this.state}

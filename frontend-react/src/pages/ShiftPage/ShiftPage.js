@@ -29,6 +29,7 @@ class ShiftPage extends Component {
     }
     componentDidMount = () => {
         console.log('this.props.hourlyRate', this.props.hourlyRate);
+        console.log('Org Users', this.props.orgUsers);
     }
 
     handleInput = event => {
@@ -50,21 +51,28 @@ class ShiftPage extends Component {
         let shift_rows = []
         let counter = 1;
         shifts.forEach(shift => {
+            //parse for date, start, end
             const date = _.split(_.split(shift.start, ' ')[0], '-').reverse().join('/');
             let startTime = _.split(shift.start, ' ')[1];
             let endTime = _.split(shift.finish, ' ')[1];
-            console.log('start time end time', startTime, endTime)
-            
+
+            //calculate hours and costs
             const hoursWorked = this.calculateHours(shift.start, shift.finish, shift.breakLength);
             const cost = (hoursWorked * parseFloat(this.props.hourlyRate)).toFixed(2);
             // add am pm
             startTime < 12 ? startTime = `${startTime} am` : startTime = `${startTime} pm`;
             endTime < 12 ? endTime = `${endTime} am` : endTime = `${endTime} pm`;
+
+           let employeeName = ''
+           this.props.orgUsers.data.forEach(user => {
+               if(user.id === shift.userId) {
+                   employeeName = user.name;
+           }})
             shift_rows = [...shift_rows, 
 
             <tr>
        {/* //name         */}
-        <td></td>
+        <td>{employeeName}</td>
        {/* //shift date      */}
         <td>{date}</td>
        {/* // starttime          */}
