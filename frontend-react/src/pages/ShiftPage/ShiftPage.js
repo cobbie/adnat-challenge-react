@@ -9,6 +9,7 @@ import LogOutButton from '../../components/LogOutButton/LogOutButton';
 import './style.css'
 
 const _ = require('lodash');
+const moment = require('moment');
 
 class ShiftPage extends Component {
     constructor(props) {
@@ -35,6 +36,16 @@ class ShiftPage extends Component {
         this.setState({[event.target.name]: event.target.value})
     }
 
+    calculateHours = (start, end, breakLength) => {
+        const startMoment = moment(start);
+        const endMoment = moment(end);
+        const breakMoment = moment.duration(breakLength, 'minutes');
+        let duration = moment.duration(endMoment.diff(startMoment)).subtract(breakMoment);
+        let hoursWorked = duration.asHours();
+
+        return hoursWorked.toFixed(2);
+    }
+
     renderShifts = shifts => {
         // let shifts = [];
         let shift_rows = []
@@ -43,9 +54,12 @@ class ShiftPage extends Component {
             const date = _.split(_.split(shift.start, ' ')[0], '-').reverse().join('/');
             let startTime = _.split(shift.start, ' ')[1];
             let endTime = _.split(shift.finish, ' ')[1];
-
-           parseInt(startTime) < 12 ? startTime = `${startTime} am` : startTime = `${startTime} pm`;
-            parseInt(endTime) < 12 ? endTime = `${endTime} am` : endTime = `${endTime} pm`;
+            console.log('start time end time', startTime, endTime)
+            
+            const hoursWorked = this.calculateHours(shift.start, shift.finish, shift.breakLength);
+            // add am pm
+            startTime < 12 ? startTime = `${startTime} am` : startTime = `${startTime} pm`;
+            endTime < 12 ? endTime = `${endTime} am` : endTime = `${endTime} pm`;
             shift_rows = [...shift_rows, 
 
             <tr>
@@ -60,7 +74,7 @@ class ShiftPage extends Component {
        {/* // break length(mins)         */}
        <td>{shift.breakLength}</td>
        {/* //hours worked          */}
-       <td></td>
+       <td>{hoursWorked}</td>
        {/* //shift cost             */}
        <td></td>
             </tr>
