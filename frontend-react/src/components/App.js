@@ -21,6 +21,7 @@ class App extends Component {
             currentUser: '',
             orgName: '',
             orgId: '',
+            orgRate: '',
             currentPassword: '',
             
             passwordInput: '',
@@ -102,7 +103,7 @@ class App extends Component {
     //     // this.attemptLogIn("asdfgh@gh.com", "asdfgh");
     }
     componentDidUpdate = () => {
-        console.table(this.state);
+        console.log(this.state);
         console.log("allOrgs", this.state.allOrgs);
     }
 
@@ -226,6 +227,7 @@ class App extends Component {
                                 currentPage: 'orgActions',
                                 orgId: res_user.data.organisationId,
                                 orgName: org.name,
+                                orgRate: org.hourlyRate,
                                 isLoadingData: false
                             })
                             return org.name;
@@ -355,6 +357,17 @@ class App extends Component {
         })
     }
 
+    getOrgUsers = () => {
+        this.instance.get('/users', {headers:{
+            'Authorization': this.state.sessionId,
+            'Content-Type': 'application/json'
+        }})
+        .then(res => {
+            return res;
+        })
+        .catch(err => err)
+    }
+
     editExistingOrg = () => {
         this.instance.put(`/organisations/${this.editOrgId}`, {
             'name': this.state.nameInput,
@@ -449,6 +462,10 @@ class App extends Component {
     }
 
     openShiftPage = () => {
+
+        const users = this.getOrgUsers();
+        const orgs = this.loadOrgData();
+
         this.instance.get('/shifts', {headers:{
             'Authorization': this.state.sessionId,
             'Content-Type': 'application/json'
@@ -573,6 +590,7 @@ class App extends Component {
                 currentUser={this.state.currentUser}
                 onClickLogout = {this.attemptLogOut}
                 onClickHeader={this.goToOrgActionsPage}
+                hourlyRate={this.state.orgRate}
                 shifts = {this.state.shifts}
                 onClickCreateShift={this.createShift}
                 userId={this.state}

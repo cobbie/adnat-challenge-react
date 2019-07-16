@@ -28,8 +28,7 @@ class ShiftPage extends Component {
         console.log(this.state);
     }
     componentDidMount = () => {
-        console.log('shifts props', this.props.shifts)
-        console.log('shifts type', typeof this.props.shifts)
+        console.log('this.props.hourlyRate', this.props.hourlyRate);
     }
 
     handleInput = event => {
@@ -57,6 +56,7 @@ class ShiftPage extends Component {
             console.log('start time end time', startTime, endTime)
             
             const hoursWorked = this.calculateHours(shift.start, shift.finish, shift.breakLength);
+            const cost = (hoursWorked * parseFloat(this.props.hourlyRate)).toFixed(2);
             // add am pm
             startTime < 12 ? startTime = `${startTime} am` : startTime = `${startTime} pm`;
             endTime < 12 ? endTime = `${endTime} am` : endTime = `${endTime} pm`;
@@ -76,7 +76,7 @@ class ShiftPage extends Component {
        {/* //hours worked          */}
        <td>{hoursWorked}</td>
        {/* //shift cost             */}
-       <td></td>
+       <td>{cost}</td>
             </tr>
             ]
             counter += 1;
@@ -119,7 +119,7 @@ class ShiftPage extends Component {
                 <tbody>
                 {this.renderShifts(this.props.shifts.data)}
                     <tr>
-                        <td>temp</td>
+                        <td>{this.name}</td>
                         <td><Input 
                             name="shiftDateInput"
                             value={this.state.shiftDateInput}
