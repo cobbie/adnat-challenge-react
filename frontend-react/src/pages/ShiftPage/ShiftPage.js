@@ -20,7 +20,7 @@ class ShiftPage extends Component {
             breakInput: ''
          }
          this.name=this.props.currentUser;
-         this.id=this.props.userId;
+         this.id=this.props.shifts.data.length + 1;
     }
 
     componentDidUpdate = () => {
@@ -28,6 +28,7 @@ class ShiftPage extends Component {
     }
     componentDidMount = () => {
         console.log('shifts props', this.props.shifts)
+        console.log('shifts type', typeof this.props.shifts)
     }
 
     handleInput = event => {
@@ -36,26 +37,37 @@ class ShiftPage extends Component {
 
     renderShifts = shifts => {
         // let shifts = [];
+        let shift_rows = []
+        let counter = 1;
         shifts.forEach(shift => {
-            shifts = [...shifts, 
+            const date = _.split(_.split(shift.start, ' ')[0], '-').reverse().join('/');
+            let startTime = _.split(shift.start, ' ')[1];
+            let endTime = _.split(shift.finish, ' ')[1];
+
+           parseInt(startTime) < 12 ? startTime = `${startTime} am` : startTime = `${startTime} pm`;
+            parseInt(endTime) < 12 ? endTime = `${endTime} am` : endTime = `${endTime} pm`;
+            shift_rows = [...shift_rows, 
+
             <tr>
-       //name        
-        <td>{shift}</td>
-       //shift date     
+       {/* //name         */}
         <td></td>
-       // starttime         
+       {/* //shift date      */}
+        <td>{date}</td>
+       {/* // starttime          */}
+       <td>{startTime}</td>
+        {/* //end time          */}
+        <td>{endTime}</td>
+       {/* // break length(mins)         */}
+       <td>{shift.breakLength}</td>
+       {/* //hours worked          */}
        <td></td>
-        //end time         
-        <td></td>
-       // break length(mins)        
+       {/* //shift cost             */}
        <td></td>
-       //hours worked         
-       <td></td>
-       //shift cost         
-       <td></td>
-            </tr>]
+            </tr>
+            ]
+            counter += 1;
         })
-        console.log('wenkwonk');
+        return shift_rows;
     }
 
     render() { 
@@ -91,32 +103,8 @@ class ShiftPage extends Component {
                 </tr>
                 </thead>
                 <tbody>
+                {this.renderShifts(this.props.shifts.data)}
                     <tr>
-                        <td>temp</td>
-                        <td>temp</td>
-                        <td>temp</td>
-                        <td>temp</td>
-                        <td>temp</td>
-                        <td>temp</td>
-                        <td>temp</td>
-                    </tr>
-                    <tr>
-                        <td>temp</td>
-                        <td>temp</td>
-                        <td>temp</td>
-                        <td>temp</td>
-                        <td>temp</td>
-                        <td>temp</td>
-                        <td>temp</td>
-                    </tr><tr>
-                        <td>temp</td>
-                        <td>temp</td>
-                        <td>temp</td>
-                        <td>temp</td>
-                        <td>temp</td>
-                        <td>temp</td>
-                        <td>temp</td>
-                    </tr><tr>
                         <td>temp</td>
                         <td><Input 
                             name="shiftDateInput"
