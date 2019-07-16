@@ -26,6 +26,9 @@ class ShiftPage extends Component {
     componentDidUpdate = () => {
         console.log(this.state);
     }
+    componentDidMount = () => {
+        console.log('shifts props', this.props.shifts)
+    }
 
     handleInput = event => {
         this.setState({[event.target.name]: event.target.value})
@@ -138,10 +141,14 @@ class ShiftPage extends Component {
                         <td colSpan="2"><Button 
                         variant="info" 
                         width="125px"
-                        // onClick={
-                        //     this.props.onClickCreateShift(
-                        //         _.assign({'userId': this.id}, this.state)
-                        //         )}
+                        onClick={
+                            this.props.onClickCreateShift(
+                                _.assign({'userId': this.id}, {
+                                    "start": `${_.split(this.state.shiftDateInput, '/', 3).reverse().join('/')} ${this.state.startTimeInput}`,
+                                    "finish": `${_.split(this.state.shiftDateInput, '/', 3).reverse().join('/')} ${this.state.startTimeInput}`,
+                                    "breakLength": this.state.breakInput
+                                })
+                                )}
                         >Create shift
 
                         </Button>

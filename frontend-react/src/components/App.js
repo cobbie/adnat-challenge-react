@@ -454,7 +454,7 @@ class App extends Component {
             'Content-Type': 'application/json'
         }})
         .then(shifts_arr =>{
-            this.setState({currentPage: 'shiftPage', shifts: [22]}, () => console.log('shifts', this.state.shifts));
+            this.setState({currentPage: 'shiftPage', shifts: shifts_arr}, () => console.log('shifts', this.state.shifts));
         })
         .catch(error => {
             if (error.response) {
@@ -478,7 +478,10 @@ class App extends Component {
                 "Content-Type": "application/json"
             }
         })
-        .then(res => console.log(res))
+        .then(shifts => {
+            console.log('success, created shift')
+            return shifts;
+        })
         .catch(err => console.log('err in createShift', err));
     }
     renderPage = () => {
@@ -571,6 +574,7 @@ class App extends Component {
                 onClickLogout = {this.attemptLogOut}
                 onClickHeader={this.goToOrgActionsPage}
                 shifts = {this.state.shifts}
+                onClickCreateShift={this.createShift}
                 userId={this.state}
 
                 
