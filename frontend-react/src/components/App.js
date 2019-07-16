@@ -23,6 +23,7 @@ class App extends Component {
             orgId: '',
             orgRate: '',
             currentPassword: '',
+            currentEmail: '',
             
             passwordInput: '',
             nameInput: '',
@@ -49,7 +50,9 @@ class App extends Component {
     //for DEV
     componentDidMount = () => {
         // this.attemptLogIn('m@o.ccc', 'aaaaaa');
-        this.attemptLogIn('a@aaa.com', 'asdfgh')
+
+        // this.attemptLogIn('a@aaa.com', 'asdfgh');
+
         // this.instance.post('/auth/login', {
         //     "email": "asdfgh@gh.com",
         //     "password": "asdfgh"
@@ -193,6 +196,7 @@ class App extends Component {
             emailInput: '',
             passwordInput: '',
             passwordConfirmInput: '',
+            currentEmail: this.state.emailInput,
             currentPassword: password,
             sessionId: res.data.sessionId,
             isLoadingData: true,
@@ -500,7 +504,18 @@ class App extends Component {
             console.log('success, created shift')
             return shifts;
         })
-        .catch(err => console.log('err in createShift', err));
+        .catch(error => {
+            if (error.response) {
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+                } else if (error.request) {
+                console.log(error.request);
+                } else {
+                console.log('Error', error.message);
+                }
+                console.log(error.config);
+        });
     }
     renderPage = () => {
         if(this.state.currentPage==='signUp'){
@@ -589,6 +604,7 @@ class App extends Component {
             <ShiftPage 
                 org={this.state.orgName}
                 currentUser={this.state.currentUser}
+                currentUserEmail={this.state.currentEmail}
                 onClickLogout = {this.attemptLogOut}
                 onClickHeader={this.goToOrgActionsPage}
                 hourlyRate={this.state.orgRate}
@@ -635,7 +651,6 @@ class App extends Component {
 
 
     render() { 
-        console.log('this.props.children', this.props.children);
         const { isLoadingData } = this.state;
 
         if(isLoadingData){
