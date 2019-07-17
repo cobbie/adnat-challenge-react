@@ -40,9 +40,14 @@ class ShiftPage extends Component {
         const startMoment = moment(start);
         const endMoment = moment(end);
         const breakMoment = moment.duration(breakLength, 'minutes');
+        console.log('startMoment', startMoment);
+        console.log('endMoment', endMoment);
+        console.log('breakMoment', breakMoment);
         let duration = moment.duration(endMoment.diff(startMoment)).subtract(breakMoment);
         let hoursWorked = duration.asHours();
 
+        console.log('duration', duration);
+        console.log('hoursWorked', hoursWorked)
         return hoursWorked.toFixed(2);
     }
 
@@ -52,7 +57,7 @@ class ShiftPage extends Component {
         const date = _.split(this.state.shiftDateInput, '/').reverse().join('-');
         let startTime = moment(this.state.startTimeInput, ["h:mm A"]).format("HH:mm");
         let endTime = moment(this.state.finishTimeInput, ["h:mm A"]).format("HH:mm");
-
+        
         startTime = `${date} ${startTime}`;
         endTime = `${date} ${endTime}`;
         console.log('this.props.currentUserEmail', this.props.currentUserEmail);
@@ -78,19 +83,20 @@ class ShiftPage extends Component {
         // let shifts = [];
         let shift_rows = []
         let counter = 1;
+        console.log('shifts', shifts);
         shifts.forEach(shift => {
             //parse for date, start, end
             const date = _.split(_.split(shift.start, ' ')[0], '-').reverse().join('/');
             let startTime = _.split(shift.start, ' ')[1];
             let endTime = _.split(shift.finish, ' ')[1];
-
             //calculate hours and costs
             const hoursWorked = this.calculateHours(shift.start, shift.finish, shift.breakLength);
             const cost = (hoursWorked * parseFloat(this.props.hourlyRate)).toFixed(2);
-            // add am pm
-            startTime.slice(0,2) < 12 ? startTime = `${startTime}am` : startTime = `${startTime}pm`;
-            endTime.slice(0,2) < 12 ? endTime = `${endTime}am` : endTime = `${endTime}pm`;
 
+            //add am pm with moment
+            // let startTime = moment(this.state.startTimeInput, ["h:mm A"]).format("HH:mm");
+            startTime = moment(startTime, "HH:mm A").format("h:mm A")
+            endTime = moment(endTime, "HH:mm A").format("h:mm A")
            let employeeName = ''
            this.props.orgUsers.data.forEach(user => {
                if(user.id === shift.userId) {
@@ -143,9 +149,9 @@ class ShiftPage extends Component {
             <thead>
                 <tr>
                     <th>Employee name</th>
-                    <th>Shift date</th>
-                    <th>Start time</th>
-                    <th>Finish time</th>
+                    <th>Shift date (MM/DD/YYYY)</th>
+                    <th>Start time (i.e. 9am)</th>
+                    <th>Finish time (i.e. 5pm)</th>
                     <th>Break length (minutes)</th>
                     <th>Hours worked</th>
                     <th>Shift cost</th>
