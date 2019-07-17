@@ -38,8 +38,8 @@ class ShiftPage extends Component {
     }
 
     calculateHours = (start, end, breakLength) => {
-        const startMoment = moment(start);
-        const endMoment = moment(end);
+        const startMoment = moment(start, ["YYYY-DD-MM HH:mm"]);
+        const endMoment = moment(end, ["YYYY-DD-MM HH:mm"]);
         const breakMoment = moment.duration(breakLength, 'minutes');
         console.log('startMoment', startMoment);
         console.log('endMoment', endMoment);

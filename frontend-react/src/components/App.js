@@ -19,11 +19,13 @@ class App extends Component {
             allOrgs: [],
             passwordConfirmInput: '',
             currentUser: '',
+            currentUserId: '',
             orgName: '',
             orgId: '',
             orgRate: '',
             currentPassword: '',
             currentEmail: '',
+            currentShiftUserId: '',
             
             passwordInput: '',
             nameInput: '',
@@ -238,7 +240,9 @@ class App extends Component {
                     })
                 })
             }
-            this.setState({currentUser: res_user.data.name})
+            this.setState({
+                currentUser: res_user.data.name,
+                currentUserId: res_user.data.id})
         }
         )
         .catch(err => console.log('error in get /users/me', err));
@@ -432,6 +436,23 @@ class App extends Component {
             })
         })
         .catch(err => console.log(err));
+
+        this.instance.get('/shifts', {headers:{
+            'Authorization': this.state.sessionId,
+            'Content-Type': 'application/json'
+        }})
+        .then(shifts => {
+            shifts.forEach(shift => {
+                if(shift.userId===this.state.currentShiftUserId)
+                this.instance.delete(`/shifts/${shift.userId}`, {headers:{
+                    'Authorization': this.state.sessionId,
+                    'Content-Type': 'application/json'
+                }})
+                .then(res => console.log('deleted', res))
+                .catch(err => console.log(err))
+            })
+        })
+        .catch(err => console.log(err))
     }
 
     editUserDetails = (obj_input) => {
@@ -513,6 +534,7 @@ class App extends Component {
         })
         .then(shifts => {
             console.log('success, created shift')
+            this.setState({currentShiftUserId: new_shift.userId})
             return shifts;
         })
         .catch(error => {
