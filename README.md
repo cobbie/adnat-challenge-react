@@ -32,4 +32,8 @@ yarn frontend:start
 ```
 
 Open up ```localhost:8080``` to begin using the program.
+
 ## Usage
+The app is intended to be used how the specs determined it. Users can create accounts, log in, join and edit organisation details, and create shifts within their organisation. An additional feature of editing users was created.
+
+## Limitations and Points of Improvement

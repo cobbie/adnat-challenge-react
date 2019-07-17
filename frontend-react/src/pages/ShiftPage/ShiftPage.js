@@ -191,14 +191,7 @@ class ShiftPage extends Component {
                         variant="info" 
                         width="125px"
                         onClick={
-                            () => {this.props.onClickCreateShift(
-                                // _.assign({'userId': this.id}, {
-                                //     "start": `${_.split(this.state.shiftDateInput, '/', 3).reverse().join('/')} ${this.state.startTimeInput}`,
-                                //     "finish": `${_.split(this.state.shiftDateInput, '/', 3).reverse().join('/')} ${this.state.startTimeInput}`,
-                                //     "breakLength": this.state.breakInput
-                                // })
-                                this.createShiftObj()
-                                )}}
+                            () => {this.props.onClickCreateShift(this.createShiftObj())}}
                         >Create shift
 
                         </Button>

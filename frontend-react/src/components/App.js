@@ -50,9 +50,7 @@ class App extends Component {
     //for DEV
     componentDidMount = () => {
         // this.attemptLogIn('m@o.ccc', 'aaaaaa');
-
-        // this.attemptLogIn('a@aaa.com', 'asdfgh');
-
+        // this.attemptLogIn('a@aaa.com', 'asdfgh')
         // this.instance.post('/auth/login', {
         //     "email": "asdfgh@gh.com",
         //     "password": "asdfgh"

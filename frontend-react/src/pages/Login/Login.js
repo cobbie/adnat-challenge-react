@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Col, ToggleButton } from 'react-bootstrap';
+import { Container, Col, Row } from 'react-bootstrap';
 
 import Input from '../../components/Input/Input'
 import Button from '../../components/Button/Button'
@@ -24,19 +24,8 @@ const Login = props => {
                     <Input title="Password" name={props.passwordName} value={props.passwordValue} onChange={props.passwordOnChange}/>
             </Col>
             <Col>
-                <ToggleButton size="sm" type="checkbox" variant="light" onChange={() =>{}}/>
-            </Col>
-            <Col>
-                <p>Remember me</p>
-            </Col>
-            <Col>
                 {/* <TextButton onClick={props.onClick}>Login</TextButton> */}
                 <Button variant="link" onClick = {props.onClick}>Login</Button>
-            </Col>
-            <Col>
-                {/* <TextButton>Forgot your password?</TextButton> */}
-                <Button variant="link" onClick = {props.onClick}>Forgot your password?</Button>
-
             </Col>
         </Container>
 

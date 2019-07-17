@@ -36,6 +36,7 @@ const JoinCreateOrg = props => {
 
         <ListGroup>
         {props.orgs.map((val, ind) => {
+          console.log('val[1]', val[1])
           return <ListItem 
                   ind={ind} 
                   key={ind} 
