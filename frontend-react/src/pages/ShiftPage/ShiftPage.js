@@ -95,19 +95,24 @@ class ShiftPage extends Component {
             const date = _.split(_.split(shift.start, ' ')[0], '-').reverse().join('/');
             let startTime = _.split(shift.start, ' ')[1];
             let endTime = _.split(shift.finish, ' ')[1];
+
+            console.log('date, startTime, endTime', date, startTime, endTime)
             //calculate hours and costs
             const hoursWorked = this.calculateHours(shift.start, shift.finish, shift.breakLength);
             const cost = (hoursWorked * parseFloat(this.props.hourlyRate)).toFixed(2);
-
+            
+            console.log('hoursWorked, cost', hoursWorked, cost);
             //add am pm with moment
             // let startTime = moment(this.state.startTimeInput, ["h:mm A"]).format("HH:mm");
             startTime = moment(startTime, "HH:mm A").format("h:mm A")
             endTime = moment(endTime, "HH:mm A").format("h:mm A")
            let employeeName = ''
+
+           if(this.props.orgUsers.data.length > 0){
            this.props.orgUsers.data.forEach(user => {
                if(user.id === shift.userId) {
                    employeeName = user.name;
-           }})
+           }})}
             shift_rows = [...shift_rows, 
             <tr>
        {/* name         */}

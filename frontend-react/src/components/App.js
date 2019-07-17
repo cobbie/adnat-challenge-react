@@ -284,9 +284,11 @@ class App extends Component {
     .then(res => {
         console.log(res);
         alert(`Successfully created ${this.state.nameInput}.`);
-        const newPage = ''.equals(this.state.orgId) ? 'joinCreateOrg' : 'orgActions'
+        // const newPage = ''.equals(this.state.orgId) ? 'joinCreateOrg' : 'orgActions'
         this.setState({
-            currentPage: 'orgActions'
+            // currentPage: 'orgActions',
+            nameInput: '',
+            rateInput: ''
         })
     })
     .catch(error => {
@@ -304,7 +306,6 @@ class App extends Component {
     }
 
     joinOrg = id => {
-        console.log('clicked');
         this.instance.post('/organisations/join', {
             organisationId: id
         }, {
@@ -318,7 +319,8 @@ class App extends Component {
             this.setState({
                 currentPage: 'orgActions',
                 orgName: res.data.name,
-                orgId: res.data.id
+                orgId: res.data.id,
+                orgRate: res.data.hourlyRate
             })
         })
         .catch(error => {
@@ -373,6 +375,7 @@ class App extends Component {
     }
 
     editExistingOrg = () => {
+        this.editOrgId=this.state.orgId;
         this.instance.put(`/organisations/${this.editOrgId}`, {
             'name': this.state.nameInput,
             'hourlyRate': this.state.rateInput
@@ -384,9 +387,15 @@ class App extends Component {
         })
         .then(res => {
             console.log(res);
+            let newPage='orgActions'
             alert(`Successfully updated organisation!`);
+            // if(newUser===true){
+            //     newPage='joinCreateOrg';
+            // }
             this.setState({
                     currentPage: 'orgActions',
+                    orgName: this.state.nameInput,
+                    orgRate: this.state.rateInput,
                     nameInput: '',
                     rateInput: ''
                 })
@@ -407,7 +416,6 @@ class App extends Component {
     }
 
     leaveOrg = () => {
-        console.log('clicked');
         this.instance.post('/organisations/leave', {}, {
             headers: {
                 'Authorization': this.state.sessionId,
@@ -419,7 +427,8 @@ class App extends Component {
             this.setState({
                 currentPage: 'joinCreateOrg',
                 orgId: '',
-                orgName: ''
+                orgName: '',
+                orgRate: ''
             })
         })
         .catch(err => console.log(err));
@@ -467,8 +476,8 @@ class App extends Component {
 
     openShiftPage = () => {
 
-        const orgs = this.loadOrgData();
-        const orgUsers = this.getOrgUsers();
+        // const orgs = this.loadOrgData();
+        // const orgUsers = this.getOrgUsers();
         this.instance.get('/shifts', {headers:{
             'Authorization': this.state.sessionId,
             'Content-Type': 'application/json'
