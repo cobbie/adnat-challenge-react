@@ -76,6 +76,12 @@ class ShiftPage extends Component {
             breakLength: this.state.breakInput
         }; 
         console.log('shiftObj', shiftObj);
+        this.setState({
+            shiftDateInput: '',
+            startTimeInput: '',
+            finishTimeInput: '',
+            breakInput: ''
+        })
         return shiftObj;
     }
 
@@ -150,8 +156,8 @@ class ShiftPage extends Component {
                 <tr>
                     <th>Employee name</th>
                     <th>Shift date (MM/DD/YYYY)</th>
-                    <th>Start time (i.e. 9am)</th>
-                    <th>Finish time (i.e. 5pm)</th>
+                    <th>Start time (i.e. 9 am)</th>
+                    <th>Finish time (i.e. 5 pm)</th>
                     <th>Break length (minutes)</th>
                     <th>Hours worked</th>
                     <th>Shift cost</th>
@@ -210,77 +216,3 @@ class ShiftPage extends Component {
 }
  
 export default ShiftPage;
-
-// const ShiftPage = props => {
-//     const shifts = props.shifts;
-//     return(
-//         <Container>
-//             <Col>
-//             <AdnatHeader />
-//             </Col>
-//             <br />
-//             <Col>
-//             <p>Logged in as {props.currentUser}.</p>
-//             <LogOutButton onClickLogout={props.onClickLogout}/>
-//             </Col>
-//             <br />
-//             <Col>
-//                 <h1>{props.org || 'Bob\'s Burgers'}</h1>
-//                 <h3>Shifts</h3>
-//                 <Table striped border="true" hover>
-//             <thead>
-//                 <tr>
-//                     <th>Employee name</th>
-//                     <th>Shift date</th>
-//                     <th>Start time</th>
-//                     <th>Finish time</th>
-//                     <th>Break length (minutes)</th>
-//                     <th>Hours worked</th>
-//                     <th>Shift cost</th>
-//                 </tr>
-//                 </thead>
-//                 <tbody>
-//                     <tr>
-//                         <td>temp</td>
-//                         <td>temp</td>
-//                         <td>temp</td>
-//                         <td>temp</td>
-//                         <td>temp</td>
-//                         <td>temp</td>
-//                         <td>temp</td>
-//                     </tr>
-//                     <tr>
-//                         <td>temp</td>
-//                         <td>temp</td>
-//                         <td>temp</td>
-//                         <td>temp</td>
-//                         <td>temp</td>
-//                         <td>temp</td>
-//                         <td>temp</td>
-//                     </tr><tr>
-//                         <td>temp</td>
-//                         <td>temp</td>
-//                         <td>temp</td>
-//                         <td>temp</td>
-//                         <td>temp</td>
-//                         <td>temp</td>
-//                         <td>temp</td>
-//                     </tr><tr>
-//                         <td>temp</td>
-//                         <td><Input size="sm"/></td>
-//                         <td><Input /></td>
-//                         <td><Input /></td>
-//                         <td><Input /></td>
-//                         <td colSpan="2"><Button variant="info" width="125px">Create shift</Button></td>
-//                     </tr>
-//                 </tbody>
-
-//                 </Table>
-
-//             </Col>
-//             <br />
-//         </Container>
-//    )
-// }
-
-// export default ShiftPage;
