@@ -477,13 +477,17 @@ class App extends Component {
     openShiftPage = () => {
 
         // const orgs = this.loadOrgData();
-        // const orgUsers = this.getOrgUsers();
-        this.instance.get('/shifts', {headers:{
+        this.getOrgUsers();
+        this.instance.get('/shifts', {
+            headers:{
             'Authorization': this.state.sessionId,
             'Content-Type': 'application/json'
         }})
         .then(shifts_arr =>{
-            this.setState({currentPage: 'shiftPage', shifts: shifts_arr}, () => console.log('shifts', this.state.shifts));
+            this.setState({
+                currentPage: 'shiftPage', 
+                shifts: shifts_arr
+            }, () => console.log('shifts', this.state.shifts));
         })
         .catch(error => {
             if (error.response) {
@@ -595,7 +599,7 @@ class App extends Component {
                 org={this.state.orgName}
                 onClickVS={() => {
                     // this.setState({isLoadingData: true});
-                    this.loadOrgData();
+                    // this.loadOrgData();
                     // this.setState({currentPage: 'shiftPage'})
                     this.openShiftPage();
                     }}

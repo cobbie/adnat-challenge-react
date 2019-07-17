@@ -28,6 +28,7 @@ class ShiftPage extends Component {
         console.log(this.state);
     }
     componentDidMount = () => {
+        console.log('mounted');
         console.log('this.props.hourlyRate', this.props.hourlyRate);
         console.log('Org Users', this.props.orgUsers);
     }
@@ -87,6 +88,8 @@ class ShiftPage extends Component {
 
     renderShifts = shifts => {
         // let shifts = [];
+        if(shifts.length < 1)
+            return 'no shifts'
         let shift_rows = []
         let counter = 1;
         console.log('shifts', shifts);
