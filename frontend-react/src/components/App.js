@@ -340,8 +340,9 @@ class App extends Component {
     goToEditPage = id => {
         this.setState({
             currentPage: 'editOrg',
+            orgId: id
         });
-        this.editOrgId = id;
+        // this.editOrgId = id;
 
     }
 
@@ -374,9 +375,8 @@ class App extends Component {
         .catch(err => err)
     }
 
-    editExistingOrg = () => {
-        this.editOrgId=this.state.orgId;
-        this.instance.put(`/organisations/${this.editOrgId}`, {
+    editExistingOrg = (id) => {
+        this.instance.put(`/organisations/${id}`, {
             'name': this.state.nameInput,
             'hourlyRate': this.state.rateInput
         }, {
@@ -635,7 +635,7 @@ class App extends Component {
             rateOnChange={this.handleInput}
 
             currentUser = {this.state.currentUser}
-            onClickUpdate={this.editExistingOrg} 
+            onClickUpdate={() => this.editExistingOrg(this.state.orgId)} 
             onClickHeader={this.goToOrgActionsPage}
             // onClickDelete
             onClickLogout = {this.attemptLogOut}
