@@ -259,7 +259,14 @@ class App extends Component {
             'Authorization': this.state.sessionId, 
             'Content-Type': 'application/json'
                 }})
-        .then(res => this.setState({currentPage: 'logIn', currentUser: ''}))
+        .then(res => this.setState({
+            currentPage: 'logIn', 
+            currentUser: '',
+            currentUserId: '',
+            orgId: '',
+            orgName: '',
+            orgRate: ''
+            }))
         .catch(error => {
             if (error.response) {
                 console.log(error.response.data);
@@ -420,6 +427,48 @@ class App extends Component {
     }
 
     leaveOrg = () => {
+        this.instance.get('/shifts', {headers:{
+            'Authorization': this.state.sessionId,
+            'Content-Type': 'application/json'
+        }})
+        .then(shifts => {
+            shifts.data.forEach(shift => {
+                if(shift.userId===this.state.currentUserId)
+                {
+                    
+                    this.instance.delete(`/shifts/${shift.userId}`, {headers:{
+                        'Authorization': this.state.sessionId,
+                        'Content-Type': 'application/json'
+                    }})
+                    .then(res => console.log('deleted', res))
+                    .catch(error => {
+                        if (error.response) {
+                            console.log(error.response.data);
+                            console.log(error.response.status);
+                            console.log(error.response.headers);
+                            } else if (error.request) {
+                            console.log(error.request);
+                            } else {
+                            console.log('Error', error.message);
+                            }
+                            console.log(error.config);
+                    })
+                }
+            })
+        })
+        .catch(error => {
+            if (error.response) {
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+                } else if (error.request) {
+                console.log(error.request);
+                } else {
+                console.log('Error', error.message);
+                }
+                console.log(error.config);
+        })
+
         this.instance.post('/organisations/leave', {}, {
             headers: {
                 'Authorization': this.state.sessionId,
@@ -437,22 +486,7 @@ class App extends Component {
         })
         .catch(err => console.log(err));
 
-        this.instance.get('/shifts', {headers:{
-            'Authorization': this.state.sessionId,
-            'Content-Type': 'application/json'
-        }})
-        .then(shifts => {
-            shifts.forEach(shift => {
-                if(shift.userId===this.state.currentShiftUserId)
-                this.instance.delete(`/shifts/${shift.userId}`, {headers:{
-                    'Authorization': this.state.sessionId,
-                    'Content-Type': 'application/json'
-                }})
-                .then(res => console.log('deleted', res))
-                .catch(err => console.log(err))
-            })
-        })
-        .catch(err => console.log(err))
+        
     }
 
     editUserDetails = (obj_input) => {
@@ -579,6 +613,7 @@ class App extends Component {
         return(
             <Login 
                 onClick={() => this.attemptLogIn()}
+                onClickSignup={() => this.setState({currentPage: 'signUp'})}
 
                 emailName={"emailInput"}
                 emailValue={this.state.emailInput}

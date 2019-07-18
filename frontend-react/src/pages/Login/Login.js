@@ -24,8 +24,11 @@ const Login = props => {
                     <Input title="Password" name={props.passwordName} value={props.passwordValue} onChange={props.passwordOnChange}/>
             </Col>
             <Col>
+                <Button variant="secondary" onClick = {props.onClick}>Login</Button>
+            </Col>
+            <Col>
                 {/* <TextButton onClick={props.onClick}>Login</TextButton> */}
-                <Button variant="link" onClick = {props.onClick}>Login</Button>
+                <Button variant="link" onClick = {props.onClickSignup}>Sign up</Button>
             </Col>
         </Container>
 
