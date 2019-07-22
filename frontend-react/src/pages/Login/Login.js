@@ -52,11 +52,3 @@ const Login = props => {
 };
 
 export default Login;
-
-//
-{
-  /* <div className = "main">
-<div className="flexbox-main">
-</div>
-</div> */
-}

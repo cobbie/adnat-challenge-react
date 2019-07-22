@@ -19,8 +19,6 @@ class ShiftPage extends Component {
       startTimeInput: "",
       finishTimeInput: "",
       breakInput: "",
-
-      //test
       shiftsArr: []
     };
     this.name = this.props.currentUser;

@@ -2,7 +2,6 @@ import React from 'react';
 import { ListGroup, Row, Col } from 'react-bootstrap';
 import Button from '../Button/Button';
 
-
 const ListItem = props => {
     return(
         <ListGroup.Item>
