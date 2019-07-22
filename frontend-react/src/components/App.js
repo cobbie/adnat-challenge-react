@@ -67,7 +67,7 @@ class App extends Component {
                     "passwordConfirmation": this.state.passwordConfirmInput
                 })
             .then(res => {
-            console.log("successfully signed up!\n" + JSON.stringify(res, null, 2));
+            alert('Successfully signed up!');
             this.setState({
                 currentPage: 'logIn',
                 nameInput: '',

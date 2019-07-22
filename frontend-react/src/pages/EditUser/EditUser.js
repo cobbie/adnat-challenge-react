@@ -45,11 +45,10 @@ class EditUser extends Component {
 
             this.state.newPasswordInput !== this.state.oldPasswordInput ? matchingPws = matchingPws : matchingPws = false;
             if(matchingPws === false){
-                alert('Invalid password input. \n(Either your new passwords are not 6 characters, they do not match, or your old password is incorrect.');
+                alert('Invalid password input. \nEither your new passwords are not 6 characters, they do not match, or your old password is incorrect.');
                 return null;
             }
         }
-        console.log(`input_obj ${input_obj}`);
         return input_obj;
     }
 
@@ -63,9 +62,6 @@ class EditUser extends Component {
                 onChange={this.handleInput}
                 value={this.state.newNameInput}
                 name="newNameInput"
-                // value={props.nameValue}
-                // onChange={props.nameOnChange}
-                // name={props.nameName}
               />
               </li>]
               counter += 1;
@@ -86,7 +82,9 @@ class EditUser extends Component {
                 <Input title="Old Password"
                 onChange={this.handleInput}
                 value={this.state.oldPasswordInput}
-                name="oldPasswordInput">
+                name="oldPasswordInput"
+                type="password"
+                >
                 </Input>
             </li>]
 
@@ -99,6 +97,7 @@ class EditUser extends Component {
                 onChange={this.handleInput}
                 value={this.state.newPasswordInput}
                 name="newPasswordInput"
+                type="password"
             /></li>]
             counter +=1;
             input = [...input, <li key={counter}>
@@ -107,6 +106,7 @@ class EditUser extends Component {
             onChange={this.handleInput}
             value={this.state.newConfirmPasswordInput}
             name="newConfirmPasswordInput"
+            type="password"
           /></li>]
           counter += 1;
         }
@@ -153,39 +153,3 @@ class EditUser extends Component {
 }
  
 export default EditUser;
-// const EditUser = props => {
-//   return (
-//     <Container>
-//       <AdnatHeader />
-//       <p>Logged in as {props.currentUser}</p>
-//       <LogOutButton onClickLogout={props.onClickLogout} />
-
-//       <h1>Update your info</h1>
-//       <Button variant="link" width="140px" onClick={renderNameInput}>Edit Name</Button>
-//       <Button variant="link" width="140px" onClick={props.onClickEmail}>Edit Email</Button>
-//       <Button variant="link" width="140px" onClick={props.onClickPassword}>Edit Password</Button>
-      
-
-//       <Input
-//         title="Email Address"
-//         value={props.nameValue}
-//         onChange={props.nameOnChange}
-//         name={props.nameName}
-//       />
-
-//       <Input
-//         title="Password"
-//         value={props.nameValue}
-//         onChange={props.nameOnChange}
-//         name={props.nameName}
-//       />
-
-//       <Input title="ConfirmPassword" 
-//           value={props.nameValue}
-//           onChange={props.nameOnChange}
-//           name={props.nameName}/>
-//     </Container>
-//   );
-// };
-
-// export default EditUser;

@@ -44,6 +44,7 @@ const Signup = props => {
           name={props.passwordName}
           secondaryText="6 characters minimum"
           placeHolder="Enter your password here"
+          type="password"
         />
       </Col>
       <Col>
@@ -53,6 +54,7 @@ const Signup = props => {
           onChange={props.passwordConfirmOnChange}
           name={props.passwordConfirmName}
           placeHolder="Confirm your password"
+          type="password"
         />
       </Col>
       <br />
