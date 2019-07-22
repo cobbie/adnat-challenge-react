@@ -153,8 +153,15 @@ class ShiftPage extends Component {
   };
 
   renderShiftRows = () => {
+
+    const sortedDates = _.orderBy(this.state.shiftsArr, o => {
+      return moment(`${o.date} ${o.startTime}`, "MM/DD/YYYY h:mm A")
+    }, ['asc'])
+    console.log('shiftsArr', this.state.shiftsArr);
+    console.log('sortedDates', sortedDates);
       // Uses shiftArr state
-    const shifts = this.state.shiftsArr.map((shift,ind)=> {
+      console.log('rendershiftrows', this.state.shiftsArr)
+    const shifts = sortedDates.map((shift,ind)=> {
         return(
         <tr key={ind}>
           {/* name         */}
@@ -173,7 +180,6 @@ class ShiftPage extends Component {
           <td>{shift.cost}</td>
         </tr>)
   })
-  console.log('shifts from rendershiftrows', shifts)
   return shifts;
 }
 
@@ -208,7 +214,7 @@ class ShiftPage extends Component {
                 <th>Shift cost</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody key={this.props.shifts.data}>
               {/* {this.renderShifts(this.props.shifts.data)} */}
                 {this.renderShiftRows()}
               <tr>
