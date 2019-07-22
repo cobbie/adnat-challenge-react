@@ -43,5 +43,5 @@ As of submission, too much of the functionality lives in ```App.js```. The code 
 
 Less state variables could also have been used for cleaner state management.
 
-### Updating shift table on creation of new shift
-One small missing feature in this submission is that the shifts table does not update upon creation of a new shift: this is because the rendering of table content is dependent upon the updating of its state which is based on props which is obtained from the parent. One way to solve this would be through lifting the state up. 
+### Smaller features
+Some smaller features could have been added such as automatically rerendering the table upon creation of a shift, email input verification, password strength checker, etc. These may be added during later times to improve the project
