@@ -47,70 +47,12 @@ class App extends Component {
          this.instance = axios.create({
              baseURL: 'http://localhost:3000',
             });
-        // this.allOrgs = [];
-        // this.orgId = 1;
     }
-
-    //for DEV
     componentDidMount = () => {
-        // this.attemptLogIn('m@o.ccc', 'aaaaaa');
-        // this.attemptLogIn('a@aaa.com', 'asdfgh')
-        // this.instance.post('/auth/login', {
-        //     "email": "asdfgh@gh.com",
-        //     "password": "asdfgh"
-        // })
-        // .then(res => {
-        //     console.log(`successfully logged in!\n${JSON.stringify(res, null, 2)}`);
-        //     this.setState({
-        //         sessionId: res.data.sessionId,
-        //     });
-        //     return res.data.sessionId
-        // })
-        // .then(res => {
-        //     this.instance.get('/users/me', {
-        //         headers: {
-        //             'Authorization': res,
-        //             'Content-Type': 'application/json'
-        //         }
-        //     })
-        //     .then(res => {
-        //         console.log('second res', res)
-        //         this.loadOrgData();
-        //         this.setState({
-        //             currentUser: res.data.name,
-        //             orgId: res.data.organisationId,
-        //             isLoadingData: false
-        //         })
-        //         console.log("reached this point");
-        //         return res.data.organisationId;
-        //     }
-        //     )
-        //     .then(res => {
-        //         // WHY AINT THIS WORKING
-        //         console.log("ALLORGS: ", this.state.allOrgs)
-        //         this.state.allOrgs.forEach(org => {
-        //                 console.log("orggg", org);
-        //                 if(org[1]===res){
-        //                 this.setState({orgName: org[0]})
-    
-        //         // for(let i = 0; i < this.state.allOrgs.length; i++){
-        //         //     if (this.state.allOrgs[i][1]===res){
-        //         //         this.setState({orgName: this.state.allOrgs[i][0]})
-        //         //     }
-        //         }
-        //     })
-        //     })
-        //     .catch(err => console.log('error in get /users/me', err));
-        // })
-        // .catch( err => {
-        //     console.log("Error!\n " + err);
-        //     alert('Error in logging in');
-        // });
-    //     // this.attemptLogIn("asdfgh@gh.com", "asdfgh");
+
     }
     componentDidUpdate = () => {
-        console.log(this.state);
-        console.log("allOrgs", this.state.allOrgs);
+        console.table(this.state);
     }
 
     attemptSignUp = () => {
@@ -135,7 +77,6 @@ class App extends Component {
             });
             })
             .catch( err => {
-            console.log("Error!\n " + err);
             alert('Error in signing up');
             });
     } 
@@ -165,22 +106,7 @@ class App extends Component {
         })
         return res;
     })
-        .catch(error => {
-            if (error.response) {
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-                } else if (error.request) {
-                console.log(error.request);
-                } else {
-                console.log('Error', error.message);
-                }
-                console.log(error.config);
-        })
-
-        // console.log(this.instance.get('/shifts', {headers: {'Authorization': this.state.sessionId, 'Content-Type': 'application/json'}}).then(res => console.log(res)).catch(err => console.log(err)));
-        // console.log(this.instance.get('/users', {headers: {'Authorization': this.state.sessionId, 'Content-Type': 'application/json'}}).then(res => console.log('org users', res)).catch(err=>console.log('err in get org users', err)));
-
+        .catch(error => console.log(error))
     }
 
 
@@ -191,7 +117,6 @@ class App extends Component {
         "password": password
     })
     .then(res => {
-        console.log("successfully logged in!\n" + JSON.stringify(res, null, 2));
         this.setState({
             currentPage: 'joinCreateOrg',
             nameInput: '',
@@ -213,10 +138,7 @@ class App extends Component {
             }
         })
         .then(res_user => {
-            console.log('second res', res_user)
             this.loadOrgData();
-            console.log('res_seshId', res_seshId)
-            console.log('res_user.data.organisationId',res_user.data.organisationId);
             if(res_user.data.organisationId === null){
                 this.setState({currentPage: 'joinCreateOrg'})                
             } else{
@@ -226,10 +148,8 @@ class App extends Component {
                         'Content-Type': 'application/json'
                 }})
                 .then(res_orgs => {
-                    console.log("res_orgs", res_orgs);
                     res_orgs.data.forEach(org => {
                         if(org.id===res_user.data.organisationId){
-                            console.log('org.name', org.name)
                             this.setState({
                                 currentPage: 'orgActions',
                                 orgId: res_user.data.organisationId,
@@ -250,10 +170,21 @@ class App extends Component {
         .catch(err => console.log('error in get /users/me', err));
     })
     .catch( err => {
-        console.log("Error!\n " + err);
         alert('Error in logging in');
     });
     }
+
+    //clearer catch log
+    // if (error.response) {
+    //     console.log(error.response.data);
+    //     console.log(error.response.status);
+    //     console.log(error.response.headers);
+    //     } else if (error.request) {
+    //     console.log(error.request);
+    //     } else {
+    //     console.log('Error', error.message);
+    //     }
+    //     console.log(error.config);
 
     attemptLogOut = () => {
         this.instance.delete('/auth/logout', {
@@ -269,19 +200,7 @@ class App extends Component {
             orgName: '',
             orgRate: ''
             }))
-        .catch(error => {
-            if (error.response) {
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-                } else if (error.request) {
-                console.log(error.request);
-                } else {
-                console.log('Error', error.message);
-                }
-                console.log(error.config);
-        });
-        // console.log(this.state.sessionId);
+        .catch(error => {console.log(error)});
     }
 
     attemptUpdate = () => {
@@ -295,7 +214,6 @@ class App extends Component {
         }
     })
     .then(res => {
-        console.log(res);
         alert(`Successfully created ${this.state.nameInput}.`);
         // const newPage = ''.equals(this.state.orgId) ? 'joinCreateOrg' : 'orgActions'
         this.setState({
@@ -304,18 +222,7 @@ class App extends Component {
             rateInput: ''
         })
     })
-    .catch(error => {
-        if (error.response) {
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-            } else if (error.request) {
-            console.log(error.request);
-            } else {
-            console.log('Error', error.message);
-            }
-            console.log(error.config);
-    })
+    .catch(error => console.log(error))
     }
 
     joinOrg = id => {
@@ -328,7 +235,6 @@ class App extends Component {
             }
         })
         .then(res => {
-            console.log(res);
             this.setState({
                 currentPage: 'orgActions',
                 orgName: res.data.name,
@@ -336,18 +242,7 @@ class App extends Component {
                 orgRate: res.data.hourlyRate
             })
         })
-        .catch(error => {
-            if (error.response) {
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-                } else if (error.request) {
-                console.log(error.request);
-                } else {
-                console.log('Error', error.message);
-                }
-                console.log(error.config);
-        });
+        .catch(error => console.log(error));
     }
 
     goToEditPage = id => {
@@ -399,12 +294,8 @@ class App extends Component {
             }
         })
         .then(res => {
-            console.log(res);
             let newPage='orgActions'
             alert(`Successfully updated organisation!`);
-            // if(newUser===true){
-            //     newPage='joinCreateOrg';
-            // }
             this.setState({
                     currentPage: 'orgActions',
                     orgName: this.state.nameInput,
@@ -414,18 +305,7 @@ class App extends Component {
                 })
             }
         )
-        .catch(error => {
-            if (error.response) {
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-                } else if (error.request) {
-                console.log(error.request);
-                } else {
-                console.log('Error', error.message);
-                }
-                console.log(error.config);
-        });
+        .catch(error => {console.log(error)});
     }
 
     leaveOrg = () => {
@@ -434,67 +314,47 @@ class App extends Component {
             'Content-Type': 'application/json'
         }})
         .then(shifts => {
+            let idArr=[];
             shifts.data.forEach(shift => {
                 if(shift.userId===this.state.currentUserId)
                 {
-                    
-                    this.instance.delete(`/shifts/${shift.userId}`, {headers:{
-                        'Authorization': this.state.sessionId,
-                        'Content-Type': 'application/json'
-                    }})
-                    .then(res => console.log('deleted', res))
-                    .catch(error => {
-                        if (error.response) {
-                            console.log(error.response.data);
-                            console.log(error.response.status);
-                            console.log(error.response.headers);
-                            } else if (error.request) {
-                            console.log(error.request);
-                            } else {
-                            console.log('Error', error.message);
-                            }
-                            console.log(error.config);
-                    })
+                    idArr = [...idArr, shift.id]
                 }
             })
-        })
-        .catch(error => {
-            if (error.response) {
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-                } else if (error.request) {
-                console.log(error.request);
-                } else {
-                console.log('Error', error.message);
-                }
-                console.log(error.config);
-        })
 
-        this.instance.post('/organisations/leave', {}, {
-            headers: {
-                'Authorization': this.state.sessionId,
-                'Content-Type': 'application/json'
-            }
+            idArr.forEach(id => {
+                this.instance.delete(`/shifts/${id}`, {
+                    headers:{
+                    'Authorization': this.state.sessionId,
+                    'Content-Type': 'application/json'
+                }})
+                .then(res => console.log('deleted', res))
+                .catch(error => console.log(error));
+            })
         })
         .then(res => {
-            alert('You have left your organisation.');
-            this.setState({
-                currentPage: 'joinCreateOrg',
-                orgId: '',
-                orgName: '',
-                orgRate: ''
+            this.instance.post('/organisations/leave', {}, {
+                headers: {
+                    'Authorization': this.state.sessionId,
+                    'Content-Type': 'application/json'
+                }
             })
+            .then(res => {
+                alert('You have left your organisation.');
+                this.setState({
+                    currentPage: 'joinCreateOrg',
+                    orgId: '',
+                    orgName: '',
+                    orgRate: ''
+                })
+            })
+            .catch(err => console.log(err));
         })
-        .catch(err => console.log(err));
-
-        
+        .catch(error => console.log(error))
     }
 
     editUserDetails = (obj_input) => {
         if(obj_input !== null){
-            console.log('obj_input in main', obj_input);
-
             if(obj_input.name || obj_input.email){
             this.instance.put('/users/me', {
                 "name": obj_input.name,
@@ -506,7 +366,6 @@ class App extends Component {
                 }
             })
             .then(res => {
-                console.log(res);
                 this.setState({
                     currentPage: 'orgActions',
                     currentUser: res.data.name ? res.data.name : this.state.currentUser,
@@ -546,18 +405,7 @@ class App extends Component {
                 shifts: shiftsArr
             }, () => console.log('shifts', this.state.shifts));
         })
-        .catch(error => {
-            if (error.response) {
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-                } else if (error.request) {
-                console.log(error.request);
-                } else {
-                console.log('Error', error.message);
-                }
-                console.log(error.config);
-        });
+        .catch(error => console.log(error));
     }
 
     createShift = (newShift) => {
@@ -569,26 +417,10 @@ class App extends Component {
             }
         })
         .then(shift => {
-            console.log('success, created shift')
             this.setState({currentShiftUserId: newShift.userId,
                             shifts: [...this.state.shifts, shift]});
-            // if(callback){
-            //     console.log('reached callback, shifts + new shift', [...this.state.shifts, shift])
-            //     callback([...this.state.shifts, shift]);
-            // }
         })
-        .catch(error => {
-            if (error.response) {
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-                } else if (error.request) {
-                console.log(error.request);
-                } else {
-                console.log('Error', error.message);
-                }
-                console.log(error.config);
-        });
+        .catch(error => console.log(error));
 
     }
     renderPage = () => {
@@ -723,7 +555,7 @@ class App extends Component {
     }
 }   
 
-    
+
 
     render() { 
         const { isLoadingData } = this.state;

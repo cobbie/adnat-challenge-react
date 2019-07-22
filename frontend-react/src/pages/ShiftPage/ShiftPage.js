@@ -27,16 +27,8 @@ class ShiftPage extends Component {
     this.id = this.props.shifts.data.length + 1;
   }
 
-  componentDidUpdate = () => {
-    console.log('this.state from shiftpage', this.state);
-    console.log('this.props.shifts.data from CDU', this.props.shifts.data)
-
-  };
-
   componentDidMount = () => {
     this.renderShifts(this.props.shifts.data);
-    console.log("mounted");
-    console.log('this.props.shifts.data from CDM', this.props.shifts.data);
   };
 
   handleInput = event => {
@@ -69,12 +61,8 @@ class ShiftPage extends Component {
 
     startTime = `${date} ${startTime}`;
     endTime = `${date} ${endTime}`;
-    console.log("this.props.currentUserEmail", this.props.currentUserEmail);
-    console.log('this.props.orgUsers.data', this.props.orgUsers.data);
     this.props.orgUsers.data.forEach(user => {
-      console.log("user.email", user.email);
       if (user.email === this.props.currentUserEmail) {
-        console.log("userId:", user.id);
         userId = user.id;
       }
     });
@@ -85,7 +73,6 @@ class ShiftPage extends Component {
       finish: endTime,
       breakLength: this.state.breakInput
     };
-    console.log("shiftObj", shiftObj);
     this.setState({
       shiftDateInput: "",
       startTimeInput: "",
@@ -101,7 +88,6 @@ class ShiftPage extends Component {
     if (shifts.length < 1) return "no shifts";
     let shiftRows = [];
     let counter = 1;
-    console.log("shifts", shifts);
     shifts.forEach(shift => {
       //parse for date, start, end
       const date = _.split(_.split(shift.start, " ")[0], "-")
@@ -110,7 +96,6 @@ class ShiftPage extends Component {
       let startTime = _.split(shift.start, " ")[1];
       let endTime = _.split(shift.finish, " ")[1];
 
-      console.log("date, startTime, endTime", date, startTime, endTime);
       //calculate hours and costs
       const hoursWorked = this.calculateHours(
         shift.start,
@@ -119,7 +104,6 @@ class ShiftPage extends Component {
       );
       const cost = (hoursWorked * parseFloat(this.props.hourlyRate)).toFixed(2);
 
-      console.log("hoursWorked, cost", hoursWorked, cost);
       //add am pm with moment
       // let startTime = moment(this.state.startTimeInput, ["h:mm A"]).format("HH:mm");
       startTime = moment(startTime, "HH:mm A").format("h:mm A");
@@ -144,7 +128,6 @@ class ShiftPage extends Component {
             hoursWorked: hoursWorked,
             cost: cost
           }]
-    console.log('shiftRows var', shiftRows);
       this.setState({
           shiftsArr: shiftRows
         }, console.log('this.setstate shiftrows', this.state));
@@ -156,11 +139,8 @@ class ShiftPage extends Component {
 
     const sortedDates = _.orderBy(this.state.shiftsArr, o => {
       return moment(`${o.date} ${o.startTime}`, "MM/DD/YYYY h:mm A")
-    }, ['asc'])
-    console.log('shiftsArr', this.state.shiftsArr);
-    console.log('sortedDates', sortedDates);
+    }, ['asc']);
       // Uses shiftArr state
-      console.log('rendershiftrows', this.state.shiftsArr)
     const shifts = sortedDates.map((shift,ind)=> {
         return(
         <tr key={ind}>
@@ -248,7 +228,7 @@ class ShiftPage extends Component {
                   />
                 </td>
 
-                <td colSpan="2">
+                <td colSpan="2" className="buttonCell">
                   <Button
                     variant="info"
                     width="125px"
