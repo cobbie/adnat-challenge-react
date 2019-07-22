@@ -34,6 +34,14 @@ yarn frontend:start
 Open up ```localhost:8080``` to begin using the program.
 
 ## Usage
-The app is intended to be used how the specs determined it. Users can create accounts, log in, join and edit organisation details, and create shifts within their organisation. An additional feature of editing users was created.
+The app is intended to be used how the specs determined it. Users can create accounts, log in, join and edit organisation details, and create shifts for themselves within their organisation. Shifts are rendered by date. An additional feature of editing users was created.
 
-## Limitations and Points of Improvement
+## Points of Improvement
+
+### Code structure
+As of submission, too much of the functionality lives in ```App.js```. The code in this file could be refactored mainly by creating a separate file to handle all of the API requests.
+
+Less state variables could also have been used for cleaner state management.
+
+### Updating shift table on creation of new shift
+One small missing feature in this submission is that the shifts table does not update upon creation of a new shift: this is because the rendering of table content is dependent upon the updating of its state which is based on props which is obtained from the parent. One way to solve this would be through lifting the state up. 

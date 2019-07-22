@@ -215,9 +215,7 @@ class App extends Component {
     })
     .then(res => {
         alert(`Successfully created ${this.state.nameInput}.`);
-        // const newPage = ''.equals(this.state.orgId) ? 'joinCreateOrg' : 'orgActions'
         this.setState({
-            // currentPage: 'orgActions',
             nameInput: '',
             rateInput: ''
         })
@@ -250,7 +248,6 @@ class App extends Component {
             currentPage: 'editOrg',
             orgId: id
         });
-        // this.editOrgId = id;
 
     }
 
@@ -391,8 +388,6 @@ class App extends Component {
     }
 
     openShiftPage = () => {
-
-        // const orgs = this.loadOrgData();
         this.getOrgUsers();
         this.instance.get('/shifts', {
             headers:{
@@ -554,8 +549,6 @@ class App extends Component {
         )
     }
 }   
-
-
 
     render() { 
         const { isLoadingData } = this.state;

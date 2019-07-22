@@ -1,5 +1,7 @@
 table, th, td {
     border: 0.1px solid black; 
+    text-align: center;
+  vertical-align: middle;
    }
 
 td {
@@ -9,4 +11,9 @@ td {
 
 .buttonCell{
   text-align: center;
+  vertical-align: center;
+}
+
+.customPad{
+  padding-top: 25px;
 }

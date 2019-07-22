@@ -84,7 +84,6 @@ class ShiftPage extends Component {
   };
 
   renderShifts = shifts => {
-    // let shifts = [];
     if (shifts.length < 1) return "no shifts";
     let shiftRows = [];
     let counter = 1;
@@ -105,7 +104,6 @@ class ShiftPage extends Component {
       const cost = (hoursWorked * parseFloat(this.props.hourlyRate)).toFixed(2);
 
       //add am pm with moment
-      // let startTime = moment(this.state.startTimeInput, ["h:mm A"]).format("HH:mm");
       startTime = moment(startTime, "HH:mm A").format("h:mm A");
       endTime = moment(endTime, "HH:mm A").format("h:mm A");
       let employeeName = "";
@@ -132,7 +130,6 @@ class ShiftPage extends Component {
           shiftsArr: shiftRows
         }, console.log('this.setstate shiftrows', this.state));
     });
-    // return shiftRows;
   };
 
   renderShiftRows = () => {
@@ -198,7 +195,7 @@ class ShiftPage extends Component {
               {/* {this.renderShifts(this.props.shifts.data)} */}
                 {this.renderShiftRows()}
               <tr>
-                <td>{this.name}</td>
+                <td><div className="customPad">{this.name}</div></td>
                 <td>
                   <Input
                     name="shiftDateInput"
@@ -229,6 +226,7 @@ class ShiftPage extends Component {
                 </td>
 
                 <td colSpan="2" className="buttonCell">
+                <div className="customPad">
                   <Button
                     variant="info"
                     width="125px"
@@ -238,6 +236,7 @@ class ShiftPage extends Component {
                   >
                     Create shift
                   </Button>
+                  </div>
                 </td>
               </tr>
             </tbody>
