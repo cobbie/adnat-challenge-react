@@ -7,6 +7,7 @@ import OrgActions from '../pages/OrgActions/OrgActions'
 import ShiftPage from '../pages/ShiftPage/ShiftPage';
 import EditOrg from '../pages/EditOrg/EditOrg'
 import EditUser from '../pages/EditUser/EditUser'
+import ErrorBoundary from '../components/ErrorBoundary/ErrorBoundary'
 
 const axios = require('axios');
 
@@ -26,6 +27,7 @@ class App extends Component {
             currentPassword: '',
             currentEmail: '',
             currentShiftUserId: '',
+            shifts: [],
             
             passwordInput: '',
             nameInput: '',
@@ -153,13 +155,13 @@ class App extends Component {
     })
     .then(res => {
         console.log("ORG DATA LOADED", JSON.stringify(res, null, 2));
-        let new_orgs = [...this.state.allOrgs];
+        let newOrgs = [...this.state.allOrgs];
         for(let i = 0; i < res.data.length-1; i++){
-            new_orgs = [...new_orgs, [res.data[i].name, res.data[i].id]];
+            newOrgs = [...newOrgs, [res.data[i].name, res.data[i].id]];
         }
         this.setState({
             isLoadingData: false,
-            allOrgs: new_orgs
+            allOrgs: newOrgs
         })
         return res;
     })
@@ -538,10 +540,10 @@ class App extends Component {
             'Authorization': this.state.sessionId,
             'Content-Type': 'application/json'
         }})
-        .then(shifts_arr =>{
+        .then(shiftsArr =>{
             this.setState({
                 currentPage: 'shiftPage', 
-                shifts: shifts_arr
+                shifts: shiftsArr
             }, () => console.log('shifts', this.state.shifts));
         })
         .catch(error => {
@@ -558,18 +560,22 @@ class App extends Component {
         });
     }
 
-    createShift = (new_shift) => {
+    createShift = (newShift) => {
         
-        this.instance.post('/shifts', new_shift, {
+        this.instance.post('/shifts', newShift, {
             headers: {
                 "Authorization": this.state.sessionId,
                 "Content-Type": "application/json"
             }
         })
-        .then(shifts => {
+        .then(shift => {
             console.log('success, created shift')
-            this.setState({currentShiftUserId: new_shift.userId})
-            return shifts;
+            this.setState({currentShiftUserId: newShift.userId,
+                            shifts: [...this.state.shifts, shift]});
+            // if(callback){
+            //     console.log('reached callback, shifts + new shift', [...this.state.shifts, shift])
+            //     callback([...this.state.shifts, shift]);
+            // }
         })
         .catch(error => {
             if (error.response) {
@@ -583,6 +589,7 @@ class App extends Component {
                 }
                 console.log(error.config);
         });
+
     }
     renderPage = () => {
         if(this.state.currentPage==='signUp'){
@@ -669,20 +676,20 @@ class App extends Component {
         )
     } else if(this.state.currentPage==='shiftPage'){
         return(
+            <ErrorBoundary>
             <ShiftPage 
-                org={this.state.orgName}
-                currentUser={this.state.currentUser}
-                currentUserEmail={this.state.currentEmail}
-                onClickLogout = {this.attemptLogOut}
-                onClickHeader={this.goToOrgActionsPage}
-                hourlyRate={this.state.orgRate}
-                orgUsers={this.orgUsers}
-                shifts = {this.state.shifts}
-                onClickCreateShift={this.createShift}
-                userId={this.state}
-
-                
-            />
+                    org={this.state.orgName}
+                    currentUser={this.state.currentUser}
+                    currentUserEmail={this.state.currentEmail}
+                    onClickLogout = {this.attemptLogOut}
+                    onClickHeader={this.goToOrgActionsPage}
+                    hourlyRate={this.state.orgRate}
+                    orgUsers={this.orgUsers}
+                    shifts = {this.state.shifts}
+                    onClickCreateShift={this.createShift}
+                    userId={this.state}
+                />
+            </ErrorBoundary>
         )
     } else if(this.state.currentPage==='editOrg'){
         return(
@@ -715,8 +722,6 @@ class App extends Component {
         )
     }
 }
-
-
 
     render() { 
         const { isLoadingData } = this.state;
