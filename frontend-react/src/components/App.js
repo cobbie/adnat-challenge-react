@@ -225,7 +225,6 @@ class App extends Component {
             orgId: res.data.id,
             orgRate: res.data.hourlyRate
         });
-        // this.loadOrgData();
     })
     .catch(error => console.log(error))
     }
