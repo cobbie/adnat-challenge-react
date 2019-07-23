@@ -396,6 +396,10 @@ class App extends Component {
         }
     }
 
+    getShifts = () => {
+
+    }
+
     openShiftPage = () => {
         this.getOrgUsers();
         this.instance.get('/shifts', {
@@ -422,15 +426,14 @@ class App extends Component {
         })
         .then(shift => {
             this.setState({currentShiftUserId: newShift.userId,
-                            shifts: [...this.state.shifts, shift]}, () => this.renderShifts(this.state.shifts));
+                            // shifts: [...this.state.shifts, shift.data]
+                        }, () => this.openShiftPage());
         })
         .catch(error => console.log(error));
     }
 
 
     // LIFTING STATE UP FROM SHIFTPAGE //
-
-
 
   calculateHours = (start, end, breakLength) => {
     const startMoment = moment(start, ["YYYY-DD-MM HH:mm"]);

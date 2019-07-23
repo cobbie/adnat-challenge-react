@@ -33,17 +33,6 @@ class ShiftPage extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
-  calculateHours = (start, end, breakLength) => {
-    const startMoment = moment(start, ["YYYY-DD-MM HH:mm"]);
-    const endMoment = moment(end, ["YYYY-DD-MM HH:mm"]);
-    const breakMoment = moment.duration(breakLength, "minutes");
-    let duration = moment
-      .duration(endMoment.diff(startMoment))
-      .subtract(breakMoment);
-    let hoursWorked = duration.asHours();
-    return hoursWorked.toFixed(2);
-  };
-
   createShiftObj = () => {
     //get current userId in org
     let userId = "";
@@ -78,87 +67,9 @@ class ShiftPage extends Component {
       breakInput: "",
       // shiftsArr: [...this.state.shiftsArr, shiftObj]
     });
+    console.log('shiftObj', shiftObj)
     return shiftObj;
   };
-
-  renderShifts = shifts => {
-    if (shifts.length < 1) return "no shifts";
-    let shiftRows = [];
-    let counter = 1;
-    shifts.forEach(shift => {
-      //parse for date, start, end
-      const date = _.split(_.split(shift.start, " ")[0], "-")
-        .reverse()
-        .join("/");
-      let startTime = _.split(shift.start, " ")[1];
-      let endTime = _.split(shift.finish, " ")[1];
-
-      //calculate hours and costs
-      const hoursWorked = this.calculateHours(
-        shift.start,
-        shift.finish,
-        shift.breakLength
-      );
-      console.log('this.props.hourlyRate', this.props.hourlyRate)
-      const cost = (hoursWorked * parseFloat(this.props.hourlyRate)).toFixed(2);
-
-      //add am pm with moment
-      startTime = moment(startTime, "HH:mm A").format("h:mm A");
-      endTime = moment(endTime, "HH:mm A").format("h:mm A");
-      let employeeName = "";
-
-      if (this.props.orgUsers.data.length > 0) {
-        this.props.orgUsers.data.forEach(user => {
-          if (user.id === shift.userId) {
-            employeeName = user.name;
-          }
-        });
-      }
-
-      shiftRows = [...shiftRows, 
-        {
-            employeeName: employeeName,
-            date: date,
-            startTime: startTime,
-            endTime: endTime,
-            breakLength: shift.breakLength,
-            hoursWorked: hoursWorked,
-            cost: cost
-          }]
-      this.setState({
-          shiftsArr: shiftRows
-        }, console.log('this.setstate shiftrows', this.state));
-    });
-  };
-
-  renderShiftRows = () => {
-
-    // sort shifts
-    const sortedDates = _.orderBy(this.state.shiftsArr, o => {
-      return moment(`${o.date} ${o.startTime}`, "MM/DD/YYYY h:mm A")
-    }, ['asc']);
-      // Uses shiftArr state
-    const shifts = sortedDates.map((shift,ind)=> {
-        return(
-        <tr key={ind}>
-          {/* name         */}
-          <td>{shift.employeeName}</td>
-          {/* shift date      */}
-          <td>{shift.date}</td>
-          {/* starttime          */}
-          <td>{shift.startTime}</td>
-          {/* end time          */}
-          <td>{shift.endTime}</td>
-          {/* break length(mins)         */}
-          <td>{shift.breakLength}</td>
-          {/* hours worked          */}
-          <td>{shift.hoursWorked}</td>
-          {/* shift cost             */}
-          <td>{shift.cost}</td>
-        </tr>)
-  })
-  return shifts;
-}
 
   render() {
     return (
