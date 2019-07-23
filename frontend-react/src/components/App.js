@@ -8,8 +8,9 @@ import ShiftPage from '../pages/ShiftPage/ShiftPage';
 import EditOrg from '../pages/EditOrg/EditOrg'
 import EditUser from '../pages/EditUser/EditUser'
 import ErrorBoundary from '../components/ErrorBoundary/ErrorBoundary'
+import moment from 'moment';
+import axios from 'axios'
 
-const axios = require('axios');
 
 class App extends Component {
     constructor(props) {
@@ -406,7 +407,7 @@ class App extends Component {
             this.setState({
                 currentPage: 'shiftPage', 
                 shifts: shiftsArr
-            }, () => console.log('shifts', this.state.shifts));
+            }, () => this.renderShifts(this.state.shifts));
         })
         .catch(error => console.log(error));
     }
@@ -421,11 +422,108 @@ class App extends Component {
         })
         .then(shift => {
             this.setState({currentShiftUserId: newShift.userId,
-                            shifts: [...this.state.shifts, shift]});
+                            shifts: [...this.state.shifts, shift]}, () => this.renderShifts(this.state.shifts));
         })
         .catch(error => console.log(error));
-
     }
+
+
+    // LIFTING STATE UP FROM SHIFTPAGE //
+
+
+
+  calculateHours = (start, end, breakLength) => {
+    const startMoment = moment(start, ["YYYY-DD-MM HH:mm"]);
+    const endMoment = moment(end, ["YYYY-DD-MM HH:mm"]);
+    const breakMoment = moment.duration(breakLength, "minutes");
+    let duration = moment
+      .duration(endMoment.diff(startMoment))
+      .subtract(breakMoment);
+    let hoursWorked = duration.asHours();
+    return hoursWorked.toFixed(2);
+  };
+
+    renderShiftRows = () => {
+
+        // sort shifts
+        const sortedDates = _.orderBy(this.state.shifts, o => {
+          return moment(`${o.date} ${o.startTime}`, "MM/DD/YYYY h:mm A")
+        }, ['asc']);
+
+        console.log('sortedDates', sortedDates)
+          // Uses shiftArr state
+        const shifts = sortedDates.map((shift,ind)=> {
+            return(
+            <tr key={ind}>
+              {/* name         */}
+              <td>{shift.employeeName}</td>
+              {/* shift date      */}
+              <td>{shift.date}</td>
+              {/* starttime          */}
+              <td>{shift.startTime}</td>
+              {/* end time          */}
+              <td>{shift.endTime}</td>
+              {/* break length(mins)         */}
+              <td>{shift.breakLength}</td>
+              {/* hours worked          */}
+              <td>{shift.hoursWorked}</td>
+              {/* shift cost             */}
+              <td>{shift.cost}</td>
+            </tr>)
+      })
+      return shifts;
+    }
+
+    renderShifts = shifts => {
+        console.log('shifts from renderShifts', shifts);
+        if (shifts.data.length < 1) return "no shifts";
+        let shiftRows = [];
+        let counter = 1;
+        shifts.data.forEach(shift => {
+          //parse for date, start, end
+          const date = _.split(_.split(shift.start, " ")[0], "-")
+            .reverse()
+            .join("/");
+          let startTime = _.split(shift.start, " ")[1];
+          let endTime = _.split(shift.finish, " ")[1];
+    
+          //calculate hours and costs
+          const hoursWorked = this.calculateHours(
+            shift.start,
+            shift.finish,
+            shift.breakLength
+          );
+          const cost = (hoursWorked * parseFloat(this.state.orgRate)).toFixed(2);
+    
+          //add am pm with moment
+          startTime = moment(startTime, "HH:mm A").format("h:mm A");
+          endTime = moment(endTime, "HH:mm A").format("h:mm A");
+          let employeeName = "";
+    
+          if (this.orgUsers.data.length > 0) {
+            this.orgUsers.data.forEach(user => {
+              if (user.id === shift.userId) {
+                employeeName = user.name;
+              }
+            });
+          }
+    
+          shiftRows = [...shiftRows, 
+            {
+                employeeName: employeeName,
+                date: date,
+                startTime: startTime,
+                endTime: endTime,
+                breakLength: shift.breakLength,
+                hoursWorked: hoursWorked,
+                cost: cost
+              }]
+          this.setState({
+              shifts: shiftRows
+            }, console.log('this.setstate shifts', this.state));
+        });
+      };
+
     renderPage = () => {
         if(this.state.currentPage==='signUp'){
 
@@ -532,6 +630,7 @@ class App extends Component {
                     shifts = {this.state.shifts}
                     onClickCreateShift={this.createShift}
                     userId={this.state}
+                    shiftRows={this.renderShiftRows()}
                 />
         )
     } else if(this.state.currentPage==='editOrg'){

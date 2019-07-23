@@ -7,11 +7,11 @@ import Button from "../../components/Button/Button";
 import LogOutButton from "../../components/LogOutButton/LogOutButton";
 
 import "./style.css";
-
-const _ = require("lodash");
-const moment = require("moment");
+import _ from 'lodash';
+import moment from 'moment';
 
 class ShiftPage extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -24,10 +24,6 @@ class ShiftPage extends Component {
     this.name = this.props.currentUser;
     this.id = this.props.shifts.data.length + 1;
   }
-
-  componentDidMount = () => {
-    this.renderShifts(this.props.shifts.data);
-  };
 
   componentDidUpdate = () => {
     console.log('this.state', this.state);
@@ -197,7 +193,8 @@ class ShiftPage extends Component {
             </thead>
             <tbody key={this.props.shifts.data}>
               {/* {this.renderShifts(this.props.shifts.data)} */}
-                {this.renderShiftRows()}
+                {/* {this.renderShiftRows()} */}
+                {this.props.shiftRows}
               <tr>
                 <td><div className="customPad">{this.name}</div></td>
                 <td>
