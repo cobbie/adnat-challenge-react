@@ -53,7 +53,6 @@ class App extends Component {
 
     }
     componentDidUpdate = () => {
-        console.table(this.state);
     }
 
     attemptSignUp = () => {
@@ -133,10 +132,10 @@ class App extends Component {
         });
         return res.data.sessionId;
     })
-    .then(res_seshId => {
+    .then(resSeshId => {
         this.instance.get('/users/me', {
             headers: {
-                'Authorization': res_seshId,
+                'Authorization': resSeshId,
                 'Content-Type': 'application/json'
             }
         })
@@ -147,7 +146,7 @@ class App extends Component {
             } else{
                 this.instance.get('/organisations', {
                     headers:{
-                        'Authorization': res_seshId,
+                        'Authorization': resSeshId,
                         'Content-Type': 'application/json'
                 }})
                 .then(resOrgs => {
@@ -201,7 +200,8 @@ class App extends Component {
             currentUserId: '',
             orgId: '',
             orgName: '',
-            orgRate: ''
+            orgRate: '',
+            allOrgs: [],
             }))
         .catch(error => {console.log(error)});
     }
@@ -447,7 +447,7 @@ class App extends Component {
   };
 
     renderShiftRows = () => {
-
+        if(this.state.shifts.data) return null
         // sort shifts
         const sortedDates = _.orderBy(this.state.shifts, o => {
           return moment(`${o.date} ${o.startTime}`, "MM/DD/YYYY h:mm A")
@@ -458,19 +458,12 @@ class App extends Component {
         const shifts = sortedDates.map((shift,ind)=> {
             return(
             <tr key={ind}>
-              {/* name         */}
               <td>{shift.employeeName}</td>
-              {/* shift date      */}
               <td>{shift.date}</td>
-              {/* starttime          */}
               <td>{shift.startTime}</td>
-              {/* end time          */}
               <td>{shift.endTime}</td>
-              {/* break length(mins)         */}
               <td>{shift.breakLength}</td>
-              {/* hours worked          */}
               <td>{shift.hoursWorked}</td>
-              {/* shift cost             */}
               <td>{shift.cost}</td>
             </tr>)
       })

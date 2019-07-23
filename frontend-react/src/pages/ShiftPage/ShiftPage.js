@@ -26,7 +26,6 @@ class ShiftPage extends Component {
   }
 
   componentDidUpdate = () => {
-    console.log('this.state', this.state);
   }
 
   handleInput = event => {
