@@ -223,7 +223,7 @@ class App extends Component {
             currentPage: 'orgActions',
             orgName: res.data.name,
             orgId: res.data.id,
-            orgrate: res.data.hourlyRate
+            orgRate: res.data.hourlyRate
         });
         // this.loadOrgData();
     })
@@ -289,7 +289,7 @@ class App extends Component {
 
     editExistingOrg = (id) => {
         if(!this.state.nameInput && !this.state.rateInput){
-            return alert('No input detected');
+            return alert('Please input your changes');
         }
         this.instance.put(`/organisations/${id}`, {
             'name': this.state.nameInput ? this.state.nameInput : this.state.orgName,
@@ -301,7 +301,6 @@ class App extends Component {
             }
         })
         .then(res => {
-            let newPage='orgActions'
             alert(`Successfully updated organisation!`);
             this.setState({
                     currentPage: 'orgActions',
