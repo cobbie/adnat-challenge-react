@@ -18,7 +18,6 @@ class App extends Component {
             currentPage: 'signUp',
             isLoadingData: false,
             allOrgs: [],
-            passwordConfirmInput: '',
             currentUser: '',
             currentUserId: '',
             orgName: '',
@@ -29,6 +28,7 @@ class App extends Component {
             currentShiftUserId: '',
             shifts: [],
             
+            passwordConfirmInput: '',
             passwordInput: '',
             nameInput: '',
             emailInput: '',
@@ -431,7 +431,13 @@ class App extends Component {
             return(
                 <Signup 
                 onClick={this.attemptSignUp}
-                onClickLogin={() => this.setState({currentPage: 'logIn'})}
+                onClickLogin={() => this.setState({
+                    currentPage: 'logIn',
+                    passwordConfirmInput: '',
+                    passwordInput: '',
+                    nameInput: '',
+                    emailInput: '',
+                    })}
                 nameValue={this.state.nameInput}
                 nameName={"nameInput"}
                 nameOnChange={this.handleInput}
@@ -454,7 +460,11 @@ class App extends Component {
         return(
             <Login 
                 onClick={() => this.attemptLogIn()}
-                onClickSignup={() => this.setState({currentPage: 'signUp'})}
+                onClickSignup={() => this.setState({
+                    currentPage: 'signUp',
+                    emailInput: '',
+                    passwordInput: ''
+                    })}
 
                 emailName={"emailInput"}
                 emailValue={this.state.emailInput}
