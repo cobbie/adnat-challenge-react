@@ -25,12 +25,15 @@ const EditOrg = props => {
           <Input title="Name" 
           value={props.nameValue}
           onChange={props.nameOnChange}
-          name={props.nameName}/>
+          name={props.nameName}
+          placeHolder="Optional"
+          />
 
           <Input title="Hourly Rate ($ per hour)"
           value={props.rateValue}
           onChange={props.rateOnChange}
           name={props.rateName}
+          placeHolder="Optional"
            />
           <Button onClick={props.onClickUpdate}>Update</Button>
           <Button variant="link" onClick={props.onClickDelete}>Delete</Button>

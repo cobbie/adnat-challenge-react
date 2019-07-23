@@ -103,6 +103,7 @@ class ShiftPage extends Component {
         shift.finish,
         shift.breakLength
       );
+      console.log('this.props.hourlyRate', this.props.hourlyRate)
       const cost = (hoursWorked * parseFloat(this.props.hourlyRate)).toFixed(2);
 
       //add am pm with moment

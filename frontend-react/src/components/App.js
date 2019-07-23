@@ -288,8 +288,11 @@ class App extends Component {
     }
 
     editExistingOrg = (id) => {
+        if(!this.state.nameInput && !this.state.rateInput){
+            return alert('No input detected');
+        }
         this.instance.put(`/organisations/${id}`, {
-            'name': this.state.nameInput,
+            'name': this.state.nameInput ? this.state.nameInput : this.state.orgName,
             'hourlyRate': this.state.rateInput
         }, {
             headers: {
@@ -302,8 +305,8 @@ class App extends Component {
             alert(`Successfully updated organisation!`);
             this.setState({
                     currentPage: 'orgActions',
-                    orgName: this.state.nameInput,
-                    orgRate: this.state.rateInput,
+                    orgName: this.state.nameInput ? this.state.nameInput : this.state.orgName,
+                    orgRate: this.state.rateInput ? this.state.rateInput : this.state.orgRate,
                     nameInput: '',
                     rateInput: ''
                 })
@@ -469,7 +472,7 @@ class App extends Component {
                 emailName={"emailInput"}
                 emailValue={this.state.emailInput}
                 emailOnChange={this.handleInput}
-
+ 
                 passwordValue={this.state.passwordInput}
                 passwordName={"passwordInput"}
                 passwordOnChange={this.handleInput}
