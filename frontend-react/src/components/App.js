@@ -97,9 +97,11 @@ class App extends Component {
     .then(res => {
         console.log("ORG DATA LOADED", JSON.stringify(res, null, 2));
         let newOrgs = [...this.state.allOrgs];
-        for(let i = 0; i < res.data.length-1; i++){
-            newOrgs = [...newOrgs, [res.data[i].name, res.data[i].id]];
-        }
+        // for(let i = 0; i < res.data.length-1; i++){
+            res.data.forEach(org => {
+                newOrgs = [...newOrgs, [org.name, org.id]];
+            })
+        // }
         this.setState({
             isLoadingData: false,
             allOrgs: newOrgs
@@ -137,9 +139,9 @@ class App extends Component {
                 'Content-Type': 'application/json'
             }
         })
-        .then(res_user => {
+        .then(resUser => {
             this.loadOrgData();
-            if(res_user.data.organisationId === null){
+            if(resUser.data.organisationId === null){
                 this.setState({currentPage: 'joinCreateOrg'})                
             } else{
                 this.instance.get('/organisations', {
@@ -147,12 +149,12 @@ class App extends Component {
                         'Authorization': res_seshId,
                         'Content-Type': 'application/json'
                 }})
-                .then(res_orgs => {
-                    res_orgs.data.forEach(org => {
-                        if(org.id===res_user.data.organisationId){
+                .then(resOrgs => {
+                    resOrgs.data.forEach(org => {
+                        if(org.id===resUser.data.organisationId){
                             this.setState({
                                 currentPage: 'orgActions',
-                                orgId: res_user.data.organisationId,
+                                orgId: resUser.data.organisationId,
                                 orgName: org.name,
                                 orgRate: org.hourlyRate,
                                 isLoadingData: false
@@ -163,8 +165,8 @@ class App extends Component {
                 })
             }
             this.setState({
-                currentUser: res_user.data.name,
-                currentUserId: res_user.data.id})
+                currentUser: resUser.data.name,
+                currentUserId: resUser.data.id})
         }
         )
         .catch(err => console.log('error in get /users/me', err));
@@ -217,8 +219,13 @@ class App extends Component {
         alert(`Successfully created ${this.state.nameInput}.`);
         this.setState({
             nameInput: '',
-            rateInput: ''
-        })
+            rateInput: '',
+            currentPage: 'orgActions',
+            orgName: res.data.name,
+            orgId: res.data.id,
+            orgrate: res.data.hourlyRate
+        });
+        // this.loadOrgData();
     })
     .catch(error => console.log(error))
     }
@@ -503,7 +510,6 @@ class App extends Component {
         )
     } else if(this.state.currentPage==='shiftPage'){
         return(
-            <ErrorBoundary>
             <ShiftPage 
                     org={this.state.orgName}
                     currentUser={this.state.currentUser}
@@ -516,7 +522,6 @@ class App extends Component {
                     onClickCreateShift={this.createShift}
                     userId={this.state}
                 />
-            </ErrorBoundary>
         )
     } else if(this.state.currentPage==='editOrg'){
         return(

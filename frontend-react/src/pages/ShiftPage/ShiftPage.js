@@ -29,6 +29,10 @@ class ShiftPage extends Component {
     this.renderShifts(this.props.shifts.data);
   };
 
+  componentDidUpdate = () => {
+    console.log('this.state', this.state);
+  }
+
   handleInput = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
@@ -132,6 +136,7 @@ class ShiftPage extends Component {
 
   renderShiftRows = () => {
 
+    // sort shifts
     const sortedDates = _.orderBy(this.state.shiftsArr, o => {
       return moment(`${o.date} ${o.startTime}`, "MM/DD/YYYY h:mm A")
     }, ['asc']);
@@ -224,7 +229,7 @@ class ShiftPage extends Component {
                 </td>
 
                 <td colSpan="2" className="buttonCell">
-                <div className="customPad">
+
                   <Button
                     variant="info"
                     width="125px"
@@ -234,7 +239,7 @@ class ShiftPage extends Component {
                   >
                     Create shift
                   </Button>
-                  </div>
+
                 </td>
               </tr>
             </tbody>
